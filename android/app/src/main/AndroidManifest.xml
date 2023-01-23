@@ -2,6 +2,9 @@
     package="com.example.visual_assistant">
     <uses-permission android:name="android.permission.RECORD_AUDIO"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission-ACCESS_COARSE_LOCATION"></uses-permission>
+   <uses-permission android:name="android.permission.CAMERA"></uses-permission>
    <application
         android:label="visual_assistant"
         android:name="${applicationName}"
@@ -22,6 +25,8 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+               <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyC6L4qS7naD72WZV8llfBAEcAvQyU-PdLE"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
