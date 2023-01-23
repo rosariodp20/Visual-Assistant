@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class gestionePreferiti extends StatefulWidget {
-  const gestionePreferiti({Key? key}) : super(key: key);
+class GestionePreferiti extends StatefulWidget {
+  const GestionePreferiti({Key? key}) : super(key: key);
 
   @override
-  State<gestionePreferiti> createState() => _gestionePreferitiState();
+  State<GestionePreferiti> createState() => _GestionePreferitiState();
 }
 
-class _gestionePreferitiState extends State<gestionePreferiti> {
+class _GestionePreferitiState extends State<GestionePreferiti> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:visual_assistant/gestionePreferiti.dart';
+import 'package:visual_assistant/gestione_preferiti.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/services/base.dart';
 import 'dart:async';
@@ -15,6 +15,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'dart:convert' as convert;
 import 'dart:isolate';
+
 class viaggio extends StatefulWidget {
     final double? latitudineOri, longitudineOri; //coordinate origine
 

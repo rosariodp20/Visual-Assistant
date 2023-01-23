@@ -4,21 +4,21 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:visual_assistant/gestionePreferiti.dart';
+import 'package:visual_assistant/gestione_preferiti.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/services/base.dart';
 import 'dart:async';
 
 import 'package:visual_assistant/viaggio.dart';
 
-class ricercaDestinazione extends StatefulWidget {
-  const ricercaDestinazione({Key? key}) : super(key: key);
+class RicercaPercorso extends StatefulWidget {
+  const RicercaPercorso({Key? key}) : super(key: key);
 
   @override
-  State<ricercaDestinazione> createState() => _ricercaDestinazioneState();
+  State<RicercaPercorso> createState() => _RicercaPercorsoState();
 }
 
-class _ricercaDestinazioneState extends State<ricercaDestinazione> {
+class _RicercaPercorsoState extends State<RicercaPercorso> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _textSpeech = "in attesa dell'indirizzo";

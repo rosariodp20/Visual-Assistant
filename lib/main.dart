@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:visual_assistant/cronologiaPercorsi.dart';
-import 'package:visual_assistant/gestionePreferiti.dart';
-import 'package:visual_assistant/ricercaDestinazione.dart';
+import 'package:visual_assistant/cronologia_destinazioni.dart';
+import 'package:visual_assistant/gestione_preferiti.dart';
+import 'package:visual_assistant/ricerca_percorso.dart';
 
 //Bisogna runnare con: flutter run --no-sound-null-safety
 void main() {
@@ -14,119 +14,167 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Visual Assistant',
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          scaffoldBackgroundColor: const Color(0xFF0d7c97)),
-      home: const MyHomePage(title: 'Visual Assistant'),
-    );
+        title: 'Visual Assistant',
+        theme: ThemeData(primarySwatch: Colors.teal),
+        home: MyHomePage());
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class MyHomePage extends StatelessWidget {
+  final appBar = AppBar(title: Text('Visual Assistant'));
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(2),
-          child: Column(children: [
-            Row(
-              children: [
-                SizedBox(width: 3),
-                InkWell(
+      appBar: appBar,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    border: Border(
+                        top: BorderSide(color: Colors.teal, width: 5),
+                        bottom: BorderSide(color: Colors.teal, width: 2.5),
+                        left: BorderSide(color: Colors.teal, width: 5),
+                        right: BorderSide(color: Colors.teal, width: 2.5))),
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => gestionePreferiti()));
+                        builder: (context) => const GestionePreferiti()));
                   },
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Ink.image(
-                        image: AssetImage('assets/stella.png'),
-                        height: 320,
-                        width: 170,
-                        fit: BoxFit.cover,
-                      ),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Icon(Icons.star, color: Colors.white, size: 130),
+                      Text(
+                        'Destinazioni preferite',
+                        style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                        textAlign: TextAlign.center,
+                      )
                     ],
                   ),
                 ),
-                SizedBox(width: 8),
-                InkWell(
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    border: Border(
+                        top: BorderSide(color: Colors.teal, width: 5),
+                        bottom: BorderSide(color: Colors.teal, width: 2.5),
+                        left: BorderSide(color: Colors.teal, width: 2.5),
+                        right: BorderSide(color: Colors.teal, width: 5))),
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: InkWell(
                   onTap: () {},
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Ink.image(
-                        image: AssetImage('assets/fotocamera.png'),
-                        height: 320,
-                        width: 170,
-                        fit: BoxFit.cover,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Icon(Icons.camera_alt, color: Colors.white, size: 130),
+                      Text(
+                        'Riconoscimento',
+                        style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-            Row(
-              children: [
-                SizedBox(height: 10),
-              ],
-            ),
-            //SizedBox(height: 20),
-            Row(
-              children: [
-                SizedBox(width: 3),
-                InkWell(
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    border: Border(
+                        top: BorderSide(color: Colors.teal, width: 2.5),
+                        bottom: BorderSide(color: Colors.teal, width: 5),
+                        left: BorderSide(color: Colors.teal, width: 5),
+                        right: BorderSide(color: Colors.teal, width: 2.5))),
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => cronologiaPercorsi()));
+                        builder: (context) => const CronologiaDestinazioni()));
                   },
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Ink.image(
-                        image: AssetImage('assets/cronologia.png'),
-                        height: 320,
-                        width: 170,
-                        fit: BoxFit.cover,
-                      ),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Icon(Icons.history, color: Colors.white, size: 130),
+                      Text(
+                        'Cronologia destinazioni',
+                        style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                        textAlign: TextAlign.center,
+                      )
                     ],
                   ),
                 ),
-                SizedBox(width: 8),
-                InkWell(
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    border: Border(
+                        top: BorderSide(color: Colors.teal, width: 2.5),
+                        bottom: BorderSide(color: Colors.teal, width: 5),
+                        left: BorderSide(color: Colors.teal, width: 2.5),
+                        right: BorderSide(color: Colors.teal, width: 5))),
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
+                child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ricercaDestinazione()));
+                        builder: (context) => const RicercaPercorso()));
                   },
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Ink.image(
-                        image: AssetImage('assets/lenteDiIngrandimento.png'),
-                        height: 320,
-                        width: 170,
-                        fit: BoxFit.cover,
-                      ),
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Icon(Icons.search, color: Colors.white, size: 130),
+                      Text(
+                        'Ricerca percorso',
+                        style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                        textAlign: TextAlign.center,
+                      )
                     ],
                   ),
                 ),
-              ],
-            ),
-          ])),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

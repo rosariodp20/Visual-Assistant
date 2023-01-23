@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class cronologiaPercorsi extends StatefulWidget {
-  const cronologiaPercorsi({Key? key}) : super(key: key);
+class CronologiaDestinazioni extends StatefulWidget {
+  const CronologiaDestinazioni({Key? key}) : super(key: key);
 
   @override
-  State<cronologiaPercorsi> createState() => _cronologiaPercorsiState();
+  State<CronologiaDestinazioni> createState() => _CronologiaDestinazioniState();
 }
 
-class _cronologiaPercorsiState extends State<cronologiaPercorsi> {
+class _CronologiaDestinazioniState extends State<CronologiaDestinazioni> {
   int col1=255;
   int col2=255;
   int col3=255;
