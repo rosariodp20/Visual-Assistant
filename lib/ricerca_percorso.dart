@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -8,7 +7,6 @@ import 'package:visual_assistant/gestione_preferiti.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/services/base.dart';
 import 'dart:async';
-
 import 'package:visual_assistant/viaggio.dart';
 
 class RicercaPercorso extends StatefulWidget {
@@ -76,9 +74,9 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
   Widget _buildPopupDialog(BuildContext context) {
     FlutterTts flutterTts = FlutterTts();
     flutterTts.setLanguage("it-IT");
-    var a = flutterTts.getVoices;
     flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});
     flutterTts.speak("Indica se l'indirizzo " + _textSpeech + " è corretto?");
+
     getCurrentLocation(); //trova la posizione dell'utente
     convertiDestinazioneinCoordinate(); //converte la posizione (Stringa) in coordinate geografiche
 
@@ -99,9 +97,18 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
             print("Latitudine destinazione: $latitudineDest" +
                 " | Longitudine destinazione: $longitudineDest");
 
-          //  print("aspe' destinazione");
+            //print("aspe' destinazione");
 
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>viaggio(latitudineOri:latitudineOri,longitudineOri: longitudineOri,latitudineDest: latitudineDest,longitudineDest: longitudineDest,)));
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => viaggio(
+                  latitudineOri: latitudineOri,
+                  longitudineOri: longitudineOri,
+                  latitudineDest: latitudineDest,
+                  longitudineDest: longitudineDest,
+                ),
+              ),
+            );
           },
           style: ElevatedButton.styleFrom(
             minimumSize: Size(100, 100),
@@ -123,11 +130,12 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
       ],
     );
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.teal,
           title: const Text("Visual Assistant"),
         ),
         backgroundColor: Colors.grey[50],
@@ -155,13 +163,13 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
                             EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                         minimumSize: Size(300, 400),
                         //side: BorderSide(width: 4.0, color: Color(0xff68240b)),
-                        primary: Color.fromRGBO(176, 224, 230, 1),
+                        primary: Colors.teal,
                       ),
                       onPressed: () => onListen(),
                       child: Text(
                         'IMPOSTA DESTINAZIONE',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 20,
                         ),
                       )),

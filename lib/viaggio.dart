@@ -40,10 +40,7 @@ class _viaggioState extends State<viaggio> {
   double? longOrigine;
   double? latDestinazione;
   double? longDestinazione;
-
   FlutterTts flutterTts = FlutterTts();
-  Map<String, dynamic>? results;
-  Map<String, dynamic>? conteiner;
   late List<CameraDescription> cameras;
   late CameraController cameraController;
 
@@ -104,6 +101,7 @@ class _viaggioState extends State<viaggio> {
 
         svolta = controllaContenutoIndicazioni(svolta);
       }
+
       String indication = json['routes'][0]['legs'][0]['steps'][0]
               ['html_instructions'] +
           ";\n" +
@@ -114,6 +112,7 @@ class _viaggioState extends State<viaggio> {
           json['routes'][0]['legs'][0]['duration']['text'];
 
       indication = controllaContenutoIndicazioni(indication);
+
       if (flag3 == true && flag2 == true) {
         await flutterTts.awaitSpeakCompletion(true);
         flutterTts.speak(indication);
@@ -143,11 +142,8 @@ class _viaggioState extends State<viaggio> {
 
   String controllaContenutoIndicazioni(String indication) {
     //metodo che toglie i tag html dalle indicazioni
-
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-
     indication = indication.replaceAll(exp, ' ');
-
     return indication;
   }
 
@@ -162,11 +158,11 @@ class _viaggioState extends State<viaggio> {
 
     if (latOrigine?.truncate() == latDestinazione?.truncate()) {
       /*
-            Non c'è un modo preciso per ottenere la fine perchè le coordinate sono double ed è difficile arrivare al punto 'x.xxxxx' preciso preciso,
-               così nei primi due if controlliamo se la parte intera della latitudine e longitudine utente sono uguali (allora sei quasi arrivato),
-               poi con il terzi if sottraiamo i valori assoluti della latitudine e longitudine utente con quelli della destinazione e,
-               se la differenza è minore di 0.0003 allora possiamo stimare con buona precisione che l'utente è arrivato a destinazione.
-        */
+        Non c'è un modo preciso per ottenere la fine perchè le coordinate sono double ed è difficile arrivare al punto 'x.xxxxx' preciso preciso,
+        così nei primi due if controlliamo se la parte intera della latitudine e longitudine utente sono uguali (allora sei quasi arrivato),
+        poi con il terzi if sottraiamo i valori assoluti della latitudine e longitudine utente con quelli della destinazione e,
+        se la differenza è minore di 0.0003 allora possiamo stimare con buona precisione che l'utente è arrivato a destinazione.
+      */
       if (longOrigine?.truncate() == longDestinazione?.truncate()) {
         if (((((latOrigine!.abs() + longOrigine!.abs()) -
                     (latDestinazione!.abs() + longDestinazione!.abs()))
@@ -218,14 +214,10 @@ class _viaggioState extends State<viaggio> {
       latDestinazione = widget.latitudineDest;
       longDestinazione = widget.longitudineDest;
 
-      print(
-          "Passata latitudine ORIGINE CABBO IN BOCCA PRIME MOMENT $latOrigine ");
-      print(
-          "Passata longitudine ORIGINE CABBO IN BOCCA PRIME MOMENT $longOrigine");
-      print(
-          "Passata latitudine Destinazione CABBO IN BOCCA PRIME MOMENT $latDestinazione");
-      print(
-          "Passata longitudine Destinazione CABBO IN BOCCA PRIME MOMENT $longDestinazione");
+      print("Passata latitudine Origine PRIME MOMENT $latOrigine ");
+      print("Passata longitudine Origine PRIME MOMENT $longOrigine");
+      print("Passata latitudine Destinazione PRIME MOMENT $latDestinazione");
+      print("Passata longitudine Destinazione PRIME MOMENT $longDestinazione");
 
       getCurrentLocation();
       Future.delayed(const Duration(seconds: 40), () {
@@ -238,12 +230,12 @@ class _viaggioState extends State<viaggio> {
           onWillPop: () async => false,
           child: new Scaffold(
             appBar: new AppBar(
-              title: new Text("VissualAssitant"),
+              backgroundColor: Colors.teal,
+              title: new Text("Visual Assitant"),
               leading: new IconButton(
                 icon: new Icon(Icons.arrow_back),
                 onPressed: () {
                   flag = false;
-
                   Navigator.of(context)
                       .pop(); //si torna nella pagina di prima -> ricercaDestinazione
                 },
