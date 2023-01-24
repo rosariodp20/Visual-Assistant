@@ -17,259 +17,253 @@ import 'dart:convert' as convert;
 import 'dart:isolate';
 
 class viaggio extends StatefulWidget {
-    final double? latitudineOri, longitudineOri; //coordinate origine
+  final double? latitudineOri, longitudineOri; //coordinate origine
 
-    final double? latitudineDest, longitudineDest; //coordinate destinazione
+  final double? latitudineDest, longitudineDest; //coordinate destinazione
 
-    const viaggio(
-            {Key? key,
-            @required this.latitudineOri,
-            @required this.longitudineOri,
-            @required this.latitudineDest,
-            @required this.longitudineDest})
-            : super(key: key);
+  const viaggio(
+      {Key? key,
+      @required this.latitudineOri,
+      @required this.longitudineOri,
+      @required this.latitudineDest,
+      @required this.longitudineDest})
+      : super(key: key);
 
-    @override
-    State<viaggio> createState() => _viaggioState();
+  @override
+  State<viaggio> createState() => _viaggioState();
 }
 
 class _viaggioState extends State<viaggio> {
-    final String chiave = 'AIzaSyC6L4qS7naD72WZV8llfBAEcAvQyU-PdLE';
-    bool flag = true, flag2 = true,flag3=true;
-    double? latOrigine;
-    double? longOrigine;
-    double? latDestinazione;
-    double? longDestinazione;
+  final String chiave = 'AIzaSyC6L4qS7naD72WZV8llfBAEcAvQyU-PdLE';
+  bool flag = true, flag2 = true, flag3 = true;
+  double? latOrigine;
+  double? longOrigine;
+  double? latDestinazione;
+  double? longDestinazione;
 
-    FlutterTts flutterTts = FlutterTts();
-    Map<String, dynamic>? results;
-    Map<String, dynamic>? conteiner;
-    late List<CameraDescription> cameras;
-    late CameraController cameraController;
+  FlutterTts flutterTts = FlutterTts();
+  Map<String, dynamic>? results;
+  Map<String, dynamic>? conteiner;
+  late List<CameraDescription> cameras;
+  late CameraController cameraController;
 
-    @override
-    void initState() {
-        startCamera();
-        super.initState();
-    }
+  @override
+  void initState() {
+    startCamera();
+    super.initState();
+  }
 
-    void startCamera() async {
-        cameras = await availableCameras();
-        cameraController = CameraController(
-            cameras[0],
-            ResolutionPreset.high,
-            enableAudio: false,
-        );
+  void startCamera() async {
+    cameras = await availableCameras();
+    cameraController = CameraController(
+      cameras[0],
+      ResolutionPreset.high,
+      enableAudio: false,
+    );
 
-        await cameraController.initialize().then((value) {
-            if (!mounted) {
-                return;
-            }
+    await cameraController.initialize().then((value) {
+      if (!mounted) {
+        return;
+      }
 
-            setState(() {}); //Refresha il widget
-        }).catchError((e) {
-            print(e);
-        });
-    }
+      setState(() {}); //Refresha il widget
+    }).catchError((e) {
+      print(e);
+    });
+  }
 
-    @override
-    void dispose() {
-        cameraController.dispose();
+  @override
+  void dispose() {
+    cameraController.dispose();
 
-        super.dispose();
-    }
+    super.dispose();
+  }
 
-    Future<void> getDirections(
-            double? l1, double? l2, double? l3, double? l4) async {
-        if (flag == true) {
-            //avvia la ricerca del percorso solo se il flag è true, perchè se clicchiamo indietro non dobbiamo ricevere più indicazioni su quel percorso (ce ne siamo accorti da terminale)
-            //questo url avvia la ricerca del percorso grazie all' api 'Directions'
-            final String url =
-                    'https://maps.googleapis.com/maps/api/directions/json?origin=$l1%2C$l2&destination=$l3%2C$l4&mode=walking&language=it&key=$chiave';
+  Future<void> getDirections(
+      double? l1, double? l2, double? l3, double? l4) async {
+    if (flag == true) {
+      //avvia la ricerca del percorso solo se il flag è true, perchè se clicchiamo indietro non dobbiamo ricevere più indicazioni su quel percorso (ce ne siamo accorti da terminale)
+      //questo url avvia la ricerca del percorso grazie all' api 'Directions'
+      final String url =
+          'https://maps.googleapis.com/maps/api/directions/json?origin=$l1%2C$l2&destination=$l3%2C$l4&mode=walking&language=it&key=$chiave';
 
-            var response = await http.get(Uri.parse(url));
+      var response = await http.get(Uri.parse(url));
 
-            print(
-                    "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+      print(
+          "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
-            var json = convert.jsonDecode(response.body);
+      var json = convert.jsonDecode(response.body);
 
-            String svolta = "";
+      String svolta = "";
 
-            if (flag2 == true) {
-                svolta = "fra " +
-                        json['routes'][0]['legs'][0]['steps'][0]['distance']['text'] +
-                        " " +
-                        json['routes'][0]['legs'][0]['steps'][1]['html_instructions'];
+      if (flag2 == true) {
+        svolta = "fra " +
+            json['routes'][0]['legs'][0]['steps'][0]['distance']['text'] +
+            " " +
+            json['routes'][0]['legs'][0]['steps'][1]['html_instructions'];
 
-                svolta = controllaContenutoIndicazioni(svolta);
-            }
-            String indication =
-                    json['routes'][0]['legs'][0]['steps'][0]['html_instructions']+
-                    ";\n" +
-                    "distanza:" +
-                    json['routes'][0]['legs'][0]['distance']['text'] +
-                    "\n" +
-                    "tempo previsto:" +
-                    json['routes'][0]['legs'][0]['duration']['text'];
+        svolta = controllaContenutoIndicazioni(svolta);
+      }
+      String indication = json['routes'][0]['legs'][0]['steps'][0]
+              ['html_instructions'] +
+          ";\n" +
+          "distanza:" +
+          json['routes'][0]['legs'][0]['distance']['text'] +
+          "\n" +
+          "tempo previsto:" +
+          json['routes'][0]['legs'][0]['duration']['text'];
 
-            indication = controllaContenutoIndicazioni(indication);
-if(flag3==true&&flag2==true)
-{
-   await  flutterTts.awaitSpeakCompletion(true);
-                    flutterTts.speak(indication);
-  
-}
-else{
-            if (flag2 == true) {
-                //se le indicazioni sono uguali a quelle della posizione utente allora il percorso non è ancora aggiornato in quanto ad esempio l'utente si trova ancora su quella via
-                print("indicazioni:" + svolta);
-                flutterTts.speak(svolta);
-            } else {
-                //altrimenti le indicazioni sono nuove perchè l'utente ha cambiato via e assegnamo a containerIndicazioni le nuove indicazioni generate dall'api
-                print("Result=$indication");
-                 await  flutterTts.awaitSpeakCompletion(true);
-                    flutterTts.speak(indication + ", stai arrivando a destinazione");
-            }
-}
-flag3=false;
-            reload();
+      indication = controllaContenutoIndicazioni(indication);
+      if (flag3 == true && flag2 == true) {
+        await flutterTts.awaitSpeakCompletion(true);
+        flutterTts.speak(indication);
+      } else {
+        if (flag2 == true) {
+          //se le indicazioni sono uguali a quelle della posizione utente allora il percorso non è ancora aggiornato in quanto ad esempio l'utente si trova ancora su quella via
+          print("indicazioni:" + svolta);
+          flutterTts.speak(svolta);
+        } else {
+          //altrimenti le indicazioni sono nuove perchè l'utente ha cambiato via e assegnamo a containerIndicazioni le nuove indicazioni generate dall'api
+          print("Result=$indication");
+          await flutterTts.awaitSpeakCompletion(true);
+          flutterTts.speak(indication + ", stai arrivando a destinazione");
         }
+      }
+      flag3 = false;
+      reload();
     }
+  }
 
-    void reload() {
-        //metodo che chiamiamo per aggiornare ogni 10 secondi il percorso (perchè l'utente si sposta)
-        Future.delayed(const Duration(seconds: 13), () {
-            getCurrentLocation();
-        });
-    }
+  void reload() {
+    //metodo che chiamiamo per aggiornare ogni 10 secondi il percorso (perchè l'utente si sposta)
+    Future.delayed(const Duration(seconds: 13), () {
+      getCurrentLocation();
+    });
+  }
 
-    String controllaContenutoIndicazioni(String indication) {
-        //metodo che toglie i tag html dalle indicazioni
+  String controllaContenutoIndicazioni(String indication) {
+    //metodo che toglie i tag html dalle indicazioni
 
-        RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
 
-        indication = indication.replaceAll(exp, ' ');
+    indication = indication.replaceAll(exp, ' ');
 
-        return indication;
-    }
+    return indication;
+  }
 
-    void getCurrentLocation() async {
-      /* var position = await Geolocator()
+  void getCurrentLocation() async {
+    /* var position = await Geolocator()
                 .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);*/
 
-        var lastPosition =  await Geolocator()
-                .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-        latOrigine = lastPosition.latitude;
-        longOrigine = lastPosition.longitude;
+    var lastPosition = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    latOrigine = lastPosition.latitude;
+    longOrigine = lastPosition.longitude;
 
-        if (latOrigine?.truncate() == latDestinazione?.truncate()) {
-            /*
+    if (latOrigine?.truncate() == latDestinazione?.truncate()) {
+      /*
             Non c'è un modo preciso per ottenere la fine perchè le coordinate sono double ed è difficile arrivare al punto 'x.xxxxx' preciso preciso,
                così nei primi due if controlliamo se la parte intera della latitudine e longitudine utente sono uguali (allora sei quasi arrivato),
                poi con il terzi if sottraiamo i valori assoluti della latitudine e longitudine utente con quelli della destinazione e,
                se la differenza è minore di 0.0003 allora possiamo stimare con buona precisione che l'utente è arrivato a destinazione.
         */
-            if (longOrigine?.truncate() == longDestinazione?.truncate()) {
-                if (((((latOrigine!.abs() + longOrigine!.abs()) -
-                                        (latDestinazione!.abs() + longDestinazione!.abs()))
-                                .abs()) <=
-                        0.0003)) {
-                    flag2 = false;
-                    print("La prossima tappa è la destinazione");
-                }
-            }
+      if (longOrigine?.truncate() == longDestinazione?.truncate()) {
+        if (((((latOrigine!.abs() + longOrigine!.abs()) -
+                    (latDestinazione!.abs() + longDestinazione!.abs()))
+                .abs()) <=
+            0.0003)) {
+          flag2 = false;
+          print("La prossima tappa è la destinazione");
         }
-
-      if (flag==true) {
-            getDirections(latOrigine, longOrigine, latDestinazione, longDestinazione);
-        }
-    }
-    void getCondizioniMeteo() async {
-        String chiave = '7617f59fee974355a15174726232001';
-        var url = Uri.parse(
-                'http://api.weatherapi.com/v1/current.json?key=$chiave&q=$latOrigine, $longOrigine&aqi=no&lang=it');
-        var response = await http.get(url);
-        var body = jsonDecode(response.body);
-
-        String condizioniMeteo = 'Condizioni meteo: ' +
-                body['current']['temp_c'].toString() +
-                " gradi " +
-                ' ' +
-                body['current']['condition']['text'];
-        print(condizioniMeteo);
-        await  flutterTts.awaitSpeakCompletion(true);
-         flutterTts.speak(condizioniMeteo);
-                 //aspetta il completamento della frase
-
-        Future.delayed(const Duration(minutes: 5), () {
-          if(flag==true)
-          {
-             getCondizioniMeteo();
-          }
-            
-        });
+      }
     }
 
-    @override
-    Widget build(BuildContext context) {
-        flutterTts.setLanguage("it-IT");
-        flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});
-
-        if (cameraController.value.isInitialized) {
-            latOrigine = widget.latitudineOri;
-            longOrigine = widget.longitudineOri;
-            latDestinazione = widget.latitudineDest;
-            longDestinazione = widget.longitudineDest;
-
-            print(
-                    "Passata latitudine ORIGINE CABBO IN BOCCA PRIME MOMENT $latOrigine ");
-            print(
-                    "Passata longitudine ORIGINE CABBO IN BOCCA PRIME MOMENT $longOrigine");
-            print(
-                    "Passata latitudine Destinazione CABBO IN BOCCA PRIME MOMENT $latDestinazione");
-            print(
-                    "Passata longitudine Destinazione CABBO IN BOCCA PRIME MOMENT $longDestinazione");
-
-            getCurrentLocation();
-            Future.delayed(const Duration(seconds: 40), () {
-              if(flag==true)
-              {
-                     getCondizioniMeteo();
-              }
-                
-            });
-
-            return new WillPopScope(
-                    onWillPop: () async => false,
-                    child: new Scaffold(
-                        appBar: new AppBar(
-                            title: new Text("VissualAssitant"),
-                            leading: new IconButton(
-                                icon: new Icon(Icons.arrow_back),
-                                onPressed: () {
-                                    flag = false;
-
-                                    Navigator.of(context)
-                                            .pop(); //si torna nella pagina di prima -> ricercaDestinazione
-                                },
-                            ),
-                        ),
-                        body: Stack(
-                            children: [
-                                CameraPreview(cameraController),
-                                Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Container(
-                                        height: 50,
-                                        width: 50,
-                                    ),
-                                )
-                            ],
-                        ),
-                    ));
-        } else {
-            return const SizedBox();
-        }
+    if (flag == true) {
+      getDirections(latOrigine, longOrigine, latDestinazione, longDestinazione);
     }
+  }
+
+  void getCondizioniMeteo() async {
+    String chiave = '7617f59fee974355a15174726232001';
+    var url = Uri.parse(
+        'http://api.weatherapi.com/v1/current.json?key=$chiave&q=$latOrigine, $longOrigine&aqi=no&lang=it');
+    var response = await http.get(url);
+    var body = jsonDecode(response.body);
+
+    String condizioniMeteo = 'Condizioni meteo: ' +
+        body['current']['temp_c'].toString() +
+        " gradi " +
+        ' ' +
+        body['current']['condition']['text'];
+    print(condizioniMeteo);
+    await flutterTts.awaitSpeakCompletion(true);
+    flutterTts.speak(condizioniMeteo);
+    //aspetta il completamento della frase
+
+    Future.delayed(const Duration(minutes: 5), () {
+      if (flag == true) {
+        getCondizioniMeteo();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    flutterTts.setLanguage("it-IT");
+    flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});
+
+    if (cameraController.value.isInitialized) {
+      latOrigine = widget.latitudineOri;
+      longOrigine = widget.longitudineOri;
+      latDestinazione = widget.latitudineDest;
+      longDestinazione = widget.longitudineDest;
+
+      print(
+          "Passata latitudine ORIGINE CABBO IN BOCCA PRIME MOMENT $latOrigine ");
+      print(
+          "Passata longitudine ORIGINE CABBO IN BOCCA PRIME MOMENT $longOrigine");
+      print(
+          "Passata latitudine Destinazione CABBO IN BOCCA PRIME MOMENT $latDestinazione");
+      print(
+          "Passata longitudine Destinazione CABBO IN BOCCA PRIME MOMENT $longDestinazione");
+
+      getCurrentLocation();
+      Future.delayed(const Duration(seconds: 40), () {
+        if (flag == true) {
+          getCondizioniMeteo();
+        }
+      });
+
+      return new WillPopScope(
+          onWillPop: () async => false,
+          child: new Scaffold(
+            appBar: new AppBar(
+              title: new Text("VissualAssitant"),
+              leading: new IconButton(
+                icon: new Icon(Icons.arrow_back),
+                onPressed: () {
+                  flag = false;
+
+                  Navigator.of(context)
+                      .pop(); //si torna nella pagina di prima -> ricercaDestinazione
+                },
+              ),
+            ),
+            body: Stack(
+              children: [
+                CameraPreview(cameraController),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                  ),
+                )
+              ],
+            ),
+          ));
+    } else {
+      return const SizedBox();
+    }
+  }
 }

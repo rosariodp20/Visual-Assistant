@@ -2,10 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:visual_assistant/cronologia_destinazioni.dart';
 import 'package:visual_assistant/gestione_preferiti.dart';
 import 'package:visual_assistant/ricerca_percorso.dart';
+import 'package:camera/camera.dart';
+
+import 'detection.dart';
+
+late List<CameraDescription> cameras;
 
 //Bisogna runnare con: flutter run --no-sound-null-safety
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    cameras = await availableCameras();
+  } on CameraException catch (e) {
+    print('Error: $e.code\nError Message: $e.message');
+  }
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -21,7 +32,9 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  final appBar = AppBar(title: Text('Visual Assistant'));
+  final appBar = AppBar(title: const Text('Visual Assistant'));
+
+  MyHomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +94,10 @@ class MyHomePage extends StatelessWidget {
                     0.5,
                 width: MediaQuery.of(context).size.width * 0.5,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => Detection(cameras)));
+                  },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: const [
