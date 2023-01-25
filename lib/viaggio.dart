@@ -18,25 +18,27 @@ import 'dart:math' as math;
 import 'camera.dart';
 import 'bndbox.dart';
 import 'models.dart';
+
 class viaggio extends StatefulWidget {
   final double? latitudineOri, longitudineOri; //coordinate origine
-final List<CameraDescription> cameras;
   final double? latitudineDest, longitudineDest; //coordinate destinazione
-  const viaggio(
-   this.cameras,
+  final List<CameraDescription> cameras;
+
+  const viaggio(this.cameras,
       {Key? key,
       required this.latitudineOri,
       required this.longitudineOri,
       required this.latitudineDest,
-      required this.longitudineDest} )
+      required this.longitudineDest})
       : super(key: key);
   @override
   State<viaggio> createState() => _viaggioState();
 }
+
 class _viaggioState extends State<viaggio> {
   final String chiave = 'AIzaSyC6L4qS7naD72WZV8llfBAEcAvQyU-PdLE';
   bool flag = true, flag2 = true, flag3 = true;
-   List<dynamic> _recognitions = <dynamic>[];
+  List<dynamic> _recognitions = <dynamic>[];
   int _imageHeight = 0;
   int _imageWidth = 0;
   String _model = yolo;
@@ -45,11 +47,32 @@ class _viaggioState extends State<viaggio> {
   double? latDestinazione;
   double? longDestinazione;
   FlutterTts flutterTts = FlutterTts();
+
   @override
   void initState() {
     super.initState();
+
+    latOrigine = widget.latitudineOri;
+    longOrigine = widget.longitudineOri;
+    latDestinazione = widget.latitudineDest;
+    longDestinazione = widget.longitudineDest;
+
+    print("Passata latitudine Origine PRIME MOMENT $latOrigine ");
+    print("Passata longitudine Origine PRIME MOMENT $longOrigine");
+    print("Passata latitudine Destinazione PRIME MOMENT $latDestinazione");
+    print("Passata longitudine Destinazione PRIME MOMENT $longDestinazione");
+
+    //abbiamo messo questi metodi in initState() perchè se messe nel build si ripeteva all'infinito
+    getCurrentLocation();
+    Future.delayed(const Duration(seconds: 40), () {
+      if (flag == true) {
+        getCondizioniMeteo();
+      }
+    });
   }
-loadModel() async {
+
+  //riconoscimento
+  loadModel() async {
     String res;
     res = await Tflite.loadModel(
       model: "assets/yolov2_tiny.tflite",
@@ -57,19 +80,24 @@ loadModel() async {
     );
     print(res);
   }
+
   onSelect(model) {
     setState(() {
       _model = model;
     });
     loadModel();
   }
-    setRecognitions(recognitions, imageHeight, imageWidth) {
+
+  setRecognitions(recognitions, imageHeight, imageWidth) {
     setState(() {
       _recognitions = recognitions;
       _imageHeight = imageHeight;
       _imageWidth = imageWidth;
     });
   }
+  //fine riconoscimento
+
+  //indicazioni viaggio
   @override
   Future<void> getDirections(
       double? l1, double? l2, double? l3, double? l4) async {
@@ -84,6 +112,7 @@ loadModel() async {
           "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
       var json = convert.jsonDecode(response.body);
       String svolta = "";
+
       if (flag2 == true) {
         svolta = "fra " +
             json['routes'][0]['legs'][0]['steps'][0]['distance']['text'] +
@@ -91,6 +120,7 @@ loadModel() async {
             json['routes'][0]['legs'][0]['steps'][1]['html_instructions'];
         svolta = controllaContenutoIndicazioni(svolta);
       }
+
       String indication = json['routes'][0]['legs'][0]['steps'][0]
               ['html_instructions'] +
           ";\n" +
@@ -133,7 +163,7 @@ loadModel() async {
     indication = indication.replaceAll(exp, ' ');
     return indication;
   }
-  
+
   void getCurrentLocation() async {
     /* var position = await Geolocator()
                 .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);*/
@@ -163,6 +193,7 @@ loadModel() async {
       getDirections(latOrigine, longOrigine, latDestinazione, longDestinazione);
     }
   }
+
   void getCondizioniMeteo() async {
     String chiave = '7617f59fee974355a15174726232001';
     var url = Uri.parse(
@@ -175,10 +206,11 @@ loadModel() async {
         " gradi " +
         ' ' +
         body['current']['condition']['text'];
+
     print(condizioniMeteo);
-    await flutterTts.awaitSpeakCompletion(true);
+    await flutterTts
+        .awaitSpeakCompletion(true); //aspetta il completamento della frase
     flutterTts.speak(condizioniMeteo);
-    //aspetta il completamento della frase
 
     Future.delayed(const Duration(minutes: 5), () {
       if (flag == true) {
@@ -186,66 +218,55 @@ loadModel() async {
       }
     });
   }
+  //fine indicazioni viaggio
 
   @override
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
     onSelect(yolo);
+
     flutterTts.setLanguage("it-IT");
     flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});
-      latOrigine = widget.latitudineOri;
-      longOrigine = widget.longitudineOri;
-      latDestinazione = widget.latitudineDest;
-      longDestinazione = widget.longitudineDest;
-      print("Passata latitudine Origine PRIME MOMENT $latOrigine ");
-      print("Passata longitudine Origine PRIME MOMENT $longOrigine");
-      print("Passata latitudine Destinazione PRIME MOMENT $latDestinazione");
-      print("Passata longitudine Destinazione PRIME MOMENT $longDestinazione");
-      getCurrentLocation();
-      Future.delayed(const Duration(seconds: 40), () {
-        if (flag == true) {
-          getCondizioniMeteo();
-        }
-      });
 
-      return  WillPopScope(
-          onWillPop: () async => false,
-          child:  Scaffold(
-            appBar: AppBar(
-               title: const Text('Visual Assistant'),
-              backgroundColor: Colors.teal,
-              leading:  IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  flag = false;
-                  Navigator.of(context)
-                      .pop(); //si torna nella pagina di prima -> ricercaDestinazione
-                },
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Visual Assistant'),
+          backgroundColor: Colors.teal,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              flag = false;
+              Navigator.of(context)
+                  .pop(); //si torna nella pagina di prima -> ricercaDestinazione
+            },
+          ),
+        ),
+        body: Stack(
+          children: [
+            Camera(
+              widget.cameras,
+              _model,
+              setRecognitions,
+            ),
+            BndBox(
+                _recognitions,
+                math.max(_imageHeight, _imageWidth),
+                math.min(_imageHeight, _imageWidth),
+                screen.height,
+                screen.width,
+                _model),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                height: 50,
+                width: 50,
               ),
-            ),
-            body: Stack(
-              children: [
-          Camera(
-            widget.cameras,
-            _model,
-            setRecognitions,
-          ),BndBox(
-              _recognitions,
-              math.max(_imageHeight, _imageWidth),
-              math.min(_imageHeight, _imageWidth),
-              screen.height,
-              screen.width,
-              _model),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child:Container(
-                    height: 50,
-                    width: 50,
-                  ),
-                )
-              ],
-            ),
-          ));
-   
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
