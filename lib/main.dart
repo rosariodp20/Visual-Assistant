@@ -169,7 +169,7 @@ class MyHomePage extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const RicercaPercorso()));
+                       builder: (context) => RicercaPercorso(cameras)));
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -6,11 +6,20 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:visual_assistant/gestione_preferiti.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/services/base.dart';
+import 'package:visual_assistant/main.dart';
 import 'dart:async';
 import 'package:visual_assistant/viaggio.dart';
+import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import 'package:tflite/tflite.dart';
+import 'dart:math' as math;
+import 'camera.dart';
+import 'bndbox.dart';
+import 'models.dart';
 
 class RicercaPercorso extends StatefulWidget {
-  const RicercaPercorso({Key? key}) : super(key: key);
+  final List<CameraDescription> cameras;
+  const RicercaPercorso(this.cameras,{Key? key}) : super(key: key);
 
   @override
   State<RicercaPercorso> createState() => _RicercaPercorsoState();
@@ -101,7 +110,7 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
 
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => viaggio(
+                builder: (context) => viaggio(cameras,
                   latitudineOri: latitudineOri,
                   longitudineOri: longitudineOri,
                   latitudineDest: latitudineDest,

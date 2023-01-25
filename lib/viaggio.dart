@@ -1,81 +1,76 @@
-import 'dart:io';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:visual_assistant/gestione_preferiti.dart';
+import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/services/base.dart';
 import 'dart:async';
-import 'package:camera/camera.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'dart:convert' as convert;
 import 'dart:isolate';
-
+import 'package:camera/camera.dart';
+import 'package:tflite/tflite.dart';
+import 'dart:math' as math;
+import 'camera.dart';
+import 'bndbox.dart';
+import 'models.dart';
 class viaggio extends StatefulWidget {
   final double? latitudineOri, longitudineOri; //coordinate origine
-
+final List<CameraDescription> cameras;
   final double? latitudineDest, longitudineDest; //coordinate destinazione
-
   const viaggio(
+   this.cameras,
       {Key? key,
-      @required this.latitudineOri,
-      @required this.longitudineOri,
-      @required this.latitudineDest,
-      @required this.longitudineDest})
+      required this.latitudineOri,
+      required this.longitudineOri,
+      required this.latitudineDest,
+      required this.longitudineDest} )
       : super(key: key);
-
   @override
   State<viaggio> createState() => _viaggioState();
 }
-
 class _viaggioState extends State<viaggio> {
   final String chiave = 'AIzaSyC6L4qS7naD72WZV8llfBAEcAvQyU-PdLE';
   bool flag = true, flag2 = true, flag3 = true;
+   List<dynamic> _recognitions = <dynamic>[];
+  int _imageHeight = 0;
+  int _imageWidth = 0;
+  String _model = yolo;
   double? latOrigine;
   double? longOrigine;
   double? latDestinazione;
   double? longDestinazione;
   FlutterTts flutterTts = FlutterTts();
-  late List<CameraDescription> cameras;
-  late CameraController cameraController;
-
   @override
   void initState() {
-    startCamera();
     super.initState();
   }
-
-  void startCamera() async {
-    cameras = await availableCameras();
-    cameraController = CameraController(
-      cameras[0],
-      ResolutionPreset.high,
-      enableAudio: false,
+loadModel() async {
+    String res;
+    res = await Tflite.loadModel(
+      model: "assets/yolov2_tiny.tflite",
+      labels: "assets/yolov2_tiny.txt",
     );
-
-    await cameraController.initialize().then((value) {
-      if (!mounted) {
-        return;
-      }
-
-      setState(() {}); //Refresha il widget
-    }).catchError((e) {
-      print(e);
+    print(res);
+  }
+  onSelect(model) {
+    setState(() {
+      _model = model;
+    });
+    loadModel();
+  }
+    setRecognitions(recognitions, imageHeight, imageWidth) {
+    setState(() {
+      _recognitions = recognitions;
+      _imageHeight = imageHeight;
+      _imageWidth = imageWidth;
     });
   }
-
   @override
-  void dispose() {
-    cameraController.dispose();
-
-    super.dispose();
-  }
-
   Future<void> getDirections(
       double? l1, double? l2, double? l3, double? l4) async {
     if (flag == true) {
@@ -85,23 +80,17 @@ class _viaggioState extends State<viaggio> {
           'https://maps.googleapis.com/maps/api/directions/json?origin=$l1%2C$l2&destination=$l3%2C$l4&mode=walking&language=it&key=$chiave';
 
       var response = await http.get(Uri.parse(url));
-
       print(
           "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-
       var json = convert.jsonDecode(response.body);
-
       String svolta = "";
-
       if (flag2 == true) {
         svolta = "fra " +
             json['routes'][0]['legs'][0]['steps'][0]['distance']['text'] +
             " " +
             json['routes'][0]['legs'][0]['steps'][1]['html_instructions'];
-
         svolta = controllaContenutoIndicazioni(svolta);
       }
-
       String indication = json['routes'][0]['legs'][0]['steps'][0]
               ['html_instructions'] +
           ";\n" +
@@ -110,9 +99,7 @@ class _viaggioState extends State<viaggio> {
           "\n" +
           "tempo previsto:" +
           json['routes'][0]['legs'][0]['duration']['text'];
-
       indication = controllaContenutoIndicazioni(indication);
-
       if (flag3 == true && flag2 == true) {
         await flutterTts.awaitSpeakCompletion(true);
         flutterTts.speak(indication);
@@ -146,16 +133,14 @@ class _viaggioState extends State<viaggio> {
     indication = indication.replaceAll(exp, ' ');
     return indication;
   }
-
+  
   void getCurrentLocation() async {
     /* var position = await Geolocator()
                 .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);*/
-
     var lastPosition = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     latOrigine = lastPosition.latitude;
     longOrigine = lastPosition.longitude;
-
     if (latOrigine?.truncate() == latDestinazione?.truncate()) {
       /*
         Non c'è un modo preciso per ottenere la fine perchè le coordinate sono double ed è difficile arrivare al punto 'x.xxxxx' preciso preciso,
@@ -178,7 +163,6 @@ class _viaggioState extends State<viaggio> {
       getDirections(latOrigine, longOrigine, latDestinazione, longDestinazione);
     }
   }
-
   void getCondizioniMeteo() async {
     String chiave = '7617f59fee974355a15174726232001';
     var url = Uri.parse(
@@ -205,20 +189,18 @@ class _viaggioState extends State<viaggio> {
 
   @override
   Widget build(BuildContext context) {
+    Size screen = MediaQuery.of(context).size;
+    onSelect(yolo);
     flutterTts.setLanguage("it-IT");
     flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});
-
-    if (cameraController.value.isInitialized) {
       latOrigine = widget.latitudineOri;
       longOrigine = widget.longitudineOri;
       latDestinazione = widget.latitudineDest;
       longDestinazione = widget.longitudineDest;
-
       print("Passata latitudine Origine PRIME MOMENT $latOrigine ");
       print("Passata longitudine Origine PRIME MOMENT $longOrigine");
       print("Passata latitudine Destinazione PRIME MOMENT $latDestinazione");
       print("Passata longitudine Destinazione PRIME MOMENT $longDestinazione");
-
       getCurrentLocation();
       Future.delayed(const Duration(seconds: 40), () {
         if (flag == true) {
@@ -226,14 +208,14 @@ class _viaggioState extends State<viaggio> {
         }
       });
 
-      return new WillPopScope(
+      return  WillPopScope(
           onWillPop: () async => false,
-          child: new Scaffold(
-            appBar: new AppBar(
+          child:  Scaffold(
+            appBar: AppBar(
+               title: const Text('Visual Assistant'),
               backgroundColor: Colors.teal,
-              title: new Text("Visual Assitant"),
-              leading: new IconButton(
-                icon: new Icon(Icons.arrow_back),
+              leading:  IconButton(
+                icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   flag = false;
                   Navigator.of(context)
@@ -243,10 +225,20 @@ class _viaggioState extends State<viaggio> {
             ),
             body: Stack(
               children: [
-                CameraPreview(cameraController),
+          Camera(
+            widget.cameras,
+            _model,
+            setRecognitions,
+          ),BndBox(
+              _recognitions,
+              math.max(_imageHeight, _imageWidth),
+              math.min(_imageHeight, _imageWidth),
+              screen.height,
+              screen.width,
+              _model),
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: Container(
+                  child:Container(
                     height: 50,
                     width: 50,
                   ),
@@ -254,8 +246,6 @@ class _viaggioState extends State<viaggio> {
               ],
             ),
           ));
-    } else {
-      return const SizedBox();
-    }
+   
   }
 }
