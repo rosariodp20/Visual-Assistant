@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:flutter_tts/flutter_tts.dart';
+//import 'package:speech_to_text/speech_to_text.dart' as stt;
+//import 'package:flutter_tts/flutter_tts.dart';
 import 'package:visual_assistant/gestione_preferiti.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
@@ -17,6 +17,7 @@ import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
 import 'camera.dart';
 import 'bndbox.dart';
+import 'main.dart';
 import 'models.dart';
 
 class viaggio extends StatefulWidget {
@@ -46,7 +47,7 @@ class _viaggioState extends State<viaggio> {
   double? longOrigine;
   double? latDestinazione;
   double? longDestinazione;
-  FlutterTts flutterTts = FlutterTts();
+
 
   @override
   void initState() {
@@ -131,7 +132,7 @@ class _viaggioState extends State<viaggio> {
           json['routes'][0]['legs'][0]['duration']['text'];
       indication = controllaContenutoIndicazioni(indication);
       if (flag3 == true && flag2 == true) {
-        await flutterTts.awaitSpeakCompletion(true);
+        //await flutterTts.awaitSpeakCompletion(true);
         flutterTts.speak(indication);
       } else {
         if (flag2 == true) {
@@ -141,7 +142,7 @@ class _viaggioState extends State<viaggio> {
         } else {
           //altrimenti le indicazioni sono nuove perchè l'utente ha cambiato via e assegnamo a containerIndicazioni le nuove indicazioni generate dall'api
           print("Result=$indication");
-          await flutterTts.awaitSpeakCompletion(true);
+          //await flutterTts.awaitSpeakCompletion(true);
           flutterTts.speak(indication + ", stai arrivando a destinazione");
         }
       }
@@ -208,8 +209,8 @@ class _viaggioState extends State<viaggio> {
         body['current']['condition']['text'];
 
     print(condizioniMeteo);
-    await flutterTts
-        .awaitSpeakCompletion(true); //aspetta il completamento della frase
+    /*await flutterTts
+        .awaitSpeakCompletion(true);*/ //aspetta il completamento della frase
     flutterTts.speak(condizioniMeteo);
 
     Future.delayed(const Duration(minutes: 5), () {
@@ -225,8 +226,6 @@ class _viaggioState extends State<viaggio> {
     Size screen = MediaQuery.of(context).size;
     onSelect(yolo);
 
-    flutterTts.setLanguage("it-IT");
-    flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});
 
     return WillPopScope(
       onWillPop: () async => false,

@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'dart:math' as math;
+import 'main.dart';
 import 'models.dart';
+
+String prevNotified = "";
+// laptop inserito per testare la vibrazione
+List<String> dangElements = ['bicycle', 'car', 'motorbike', 'bus', 'train', 'truck',
+  'traffic light', 'stop sign', 'laptop'];
+
 
 class BndBox extends StatelessWidget {
   final List<dynamic> results;
@@ -44,6 +52,8 @@ class BndBox extends StatelessWidget {
           h = _h * scaleH;
           if (_y < difH / 2) h -= (difH / 2 - _y) * scaleH;
         }
+
+        notifyElement(re["detectedClass"], (re["confidenceInClass"] * 100));
 
         return Positioned(
           left: math.max(0, x),
@@ -136,6 +146,8 @@ class BndBox extends StatelessWidget {
       return lists;
     }
 
+
+
     return Stack(
       children: model == mobilenet
           ? _renderStrings()
@@ -145,3 +157,18 @@ class BndBox extends StatelessWidget {
     );
   }
 }
+
+notifyElement(String element, double confidence) async {
+  if(confidence >= 75){
+    if(dangElements.contains(element)){
+      Vibrate.vibrate();
+    }
+    if(element != prevNotified){
+      //await flutterTts.awaitSpeakCompletion(true);
+      flutterTts.speak(element);
+      prevNotified = element;
+    }
+  }
+}
+
+

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:geocoder/services/base.dart';
 import 'package:visual_assistant/main.dart';
 import 'package:visual_assistant/viaggio.dart';
 import 'package:camera/camera.dart';
-import 'bndbox.dart';
-import 'models.dart';
+
 
 class RicercaPercorso extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -74,9 +71,9 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
   }
 
   Widget _buildPopupDialog(BuildContext context) {
-    FlutterTts flutterTts = FlutterTts();
+    /*FlutterTts flutterTts = FlutterTts();
     flutterTts.setLanguage("it-IT");
-    flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});
+    flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});*/
     flutterTts.speak("Indica se l'indirizzo " + _textSpeech + " è corretto?");
 
     getCurrentLocation(); //trova la posizione dell'utente

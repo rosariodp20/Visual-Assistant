@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:visual_assistant/cronologia_destinazioni.dart';
 import 'package:visual_assistant/gestione_preferiti.dart';
 import 'package:visual_assistant/ricerca_percorso.dart';
@@ -7,6 +8,7 @@ import 'package:camera/camera.dart';
 import 'detection.dart';
 
 late List<CameraDescription> cameras;
+FlutterTts flutterTts = FlutterTts();
 
 //Bisogna runnare con: flutter run --no-sound-null-safety
 Future<void> main() async {
@@ -16,6 +18,10 @@ Future<void> main() async {
   } on CameraException catch (e) {
     print('Error: $e.code\nError Message: $e.message');
   }
+
+  flutterTts.setLanguage("it-IT");
+  flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});
+  flutterTts.setQueueMode(1);
   runApp(MyApp());
 }
 
