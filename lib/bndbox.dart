@@ -163,6 +163,7 @@ notifyElement(String element, double confidence) async {
     if(dangElements.contains(element)){
       Vibrate.vibrate();
     }
+    
     if(element != prevNotified){
       //await flutterTts.awaitSpeakCompletion(true);
       flutterTts.speak(element);

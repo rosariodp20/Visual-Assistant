@@ -4,7 +4,6 @@ import 'package:visual_assistant/cronologia_destinazioni.dart';
 import 'package:visual_assistant/gestione_preferiti.dart';
 import 'package:visual_assistant/ricerca_percorso.dart';
 import 'package:camera/camera.dart';
-
 import 'detection.dart';
 
 late List<CameraDescription> cameras;

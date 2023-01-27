@@ -74,6 +74,7 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
     /*FlutterTts flutterTts = FlutterTts();
     flutterTts.setLanguage("it-IT");
     flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});*/
+
     flutterTts.speak("Indica se l'indirizzo " + _textSpeech + " è corretto?");
 
     getCurrentLocation(); //trova la posizione dell'utente

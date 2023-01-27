@@ -226,7 +226,6 @@ class _viaggioState extends State<viaggio> {
     Size screen = MediaQuery.of(context).size;
     onSelect(yolo);
 
-
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
