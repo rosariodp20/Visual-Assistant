@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-//import 'package:speech_to_text/speech_to_text.dart' as stt;
-//import 'package:flutter_tts/flutter_tts.dart';
 import 'package:visual_assistant/gestione_preferiti.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
@@ -47,7 +45,6 @@ class _viaggioState extends State<viaggio> {
   double? longOrigine;
   double? latDestinazione;
   double? longDestinazione;
-
 
   @override
   void initState() {

@@ -5,10 +5,17 @@ import 'main.dart';
 import 'models.dart';
 
 String prevNotified = "";
-// laptop inserito per testare la vibrazione
-List<String> dangElements = ['bicycle', 'car', 'motorbike', 'bus', 'train', 'truck',
-  'traffic light', 'stop sign', 'laptop'];
-
+List<String> dangElements = [
+  'bicycle',
+  'car',
+  'motorbike',
+  'bus',
+  'train',
+  'truck',
+  'traffic light',
+  'stop sign',
+  'laptop'
+];
 
 class BndBox extends StatelessWidget {
   final List<dynamic> results;
@@ -146,8 +153,6 @@ class BndBox extends StatelessWidget {
       return lists;
     }
 
-
-
     return Stack(
       children: model == mobilenet
           ? _renderStrings()
@@ -158,18 +163,330 @@ class BndBox extends StatelessWidget {
   }
 }
 
+void traduciInItaliano(String element) {
+  switch (element) {
+    case "person":
+      flutterTts.speak("persona");
+      break;
+
+    case "bicycle":
+      flutterTts.speak("bicicletta");
+      break;
+
+    case "car":
+      flutterTts.speak("automobile");
+      break;
+
+    case "motorbike":
+      flutterTts.speak("motocicletta");
+      break;
+
+    case "aeroplane":
+      flutterTts.speak("aereoplano");
+      break;
+
+    case "bus":
+      flutterTts.speak("autobus");
+      break;
+
+    case "train":
+      flutterTts.speak("treno");
+      break;
+
+    case "truck":
+      flutterTts.speak("camion");
+      break;
+
+    case "boat":
+      flutterTts.speak("barca");
+      break;
+
+    case "traffic light":
+      flutterTts.speak("semaforo");
+      break;
+
+    case "fire hydrant":
+      flutterTts.speak("estintore");
+      break;
+
+    case "stop sign":
+      flutterTts.speak("segnale di stop");
+      break;
+
+    case "parking meter":
+      flutterTts.speak("parchiemetro");
+      break;
+
+    case "bench":
+      flutterTts.speak("panchina");
+      break;
+
+    case "bird":
+      flutterTts.speak("uccello");
+      break;
+
+    case "cat":
+      flutterTts.speak("gatto");
+      break;
+
+    case "dog":
+      flutterTts.speak("cane");
+      break;
+
+    case "horse":
+      flutterTts.speak("cavallo");
+      break;
+
+    case "sheep":
+      flutterTts.speak("pecora");
+      break;
+
+    case "cow":
+      flutterTts.speak("mucca");
+      break;
+
+    case "elephant":
+      flutterTts.speak("elefante");
+      break;
+
+    case "bear":
+      flutterTts.speak("orso");
+      break;
+
+    case "giraffe":
+      flutterTts.speak("giraffa");
+      break;
+
+    case "backpack":
+      flutterTts.speak("zaino");
+      break;
+
+    case "umbrella":
+      flutterTts.speak("ombrello");
+      break;
+
+    case "handbag":
+      flutterTts.speak("borsetta");
+      break;
+
+    case "tie":
+      flutterTts.speak("cravatta");
+      break;
+
+    case "suitcase":
+      flutterTts.speak("valigia");
+      break;
+
+    case "skis":
+      flutterTts.speak("sci");
+      break;
+
+    case "snowboard":
+      flutterTts.speak("snowboard");
+      break;
+
+    case "sports ball":
+      flutterTts.speak("palla");
+      break;
+
+    case "kite":
+      flutterTts.speak("aquilone");
+      break;
+
+    case "baseball bat":
+      flutterTts.speak("mazza da baseball");
+      break;
+
+    case "baseball glove":
+      flutterTts.speak("guantone da baseball");
+      break;
+
+    case "skateboard":
+      flutterTts.speak("skateboard");
+      break;
+
+    case "surfboard":
+      flutterTts.speak("tavola da surf");
+      break;
+
+    case "tennis racket":
+      flutterTts.speak("racchetta da tennis");
+      break;
+
+    case "bottle":
+      flutterTts.speak("bottiglia");
+      break;
+
+    case "wine glass":
+      flutterTts.speak("bicchiere di vino");
+      break;
+
+    case "cup":
+      flutterTts.speak("tazza");
+      break;
+
+    case "fork":
+      flutterTts.speak("forchetta");
+      break;
+
+    case "knife":
+      flutterTts.speak("coltello");
+      break;
+
+    case "spoon":
+      flutterTts.speak("cucchiaio");
+      break;
+
+    case "bowl":
+      flutterTts.speak("ciotola");
+      break;
+
+    case "banana":
+      flutterTts.speak("banana");
+      break;
+
+    case "apple":
+      flutterTts.speak("mela");
+      break;
+
+    case "sandwich":
+      flutterTts.speak("sandwich");
+      break;
+
+    case "orange":
+      flutterTts.speak("arancia");
+      break;
+
+    case "broccoli":
+      flutterTts.speak("broccoli");
+      break;
+
+    case "carrot":
+      flutterTts.speak("carota");
+      break;
+
+    case "hot dog":
+      flutterTts.speak("hot dog");
+      break;
+
+    case "pizza":
+      flutterTts.speak("pizza");
+      break;
+
+    case "donut":
+      flutterTts.speak("ciambella");
+      break;
+
+    case "cake":
+      flutterTts.speak("torta");
+      break;
+
+    case "chair":
+      flutterTts.speak("sedia");
+      break;
+
+    case "sofa":
+      flutterTts.speak("divano");
+      break;
+
+    case "pottedplant":
+      flutterTts.speak("piantina nel vaso");
+      break;
+
+    case "bed":
+      flutterTts.speak("letto");
+      break;
+
+    case "diningtable":
+      flutterTts.speak("tavolo");
+      break;
+
+    case "toilet":
+      flutterTts.speak("bagno");
+      break;
+
+    case "tvmonitor":
+      flutterTts.speak("tvmonitor");
+      break;
+
+    case "laptop":
+      flutterTts.speak("laptop");
+      break;
+
+    case "remote":
+      flutterTts.speak("telecomando");
+      break;
+
+    case "keyboard":
+      flutterTts.speak("tastiera");
+      break;
+
+    case "cell phone":
+      flutterTts.speak("cellulare");
+      break;
+
+    case "microwave":
+      flutterTts.speak("microonde");
+      break;
+
+    case "oven":
+      flutterTts.speak("forno");
+      break;
+
+    case "toaster":
+      flutterTts.speak("tostapane");
+      break;
+
+    case "sink":
+      flutterTts.speak("lavandino");
+      break;
+
+    case "refrigerator":
+      flutterTts.speak("frigorifero");
+      break;
+
+    case "book":
+      flutterTts.speak("libro");
+      break;
+
+    case "clock":
+      flutterTts.speak("orologio");
+      break;
+
+    case "vase":
+      flutterTts.speak("vaso");
+      break;
+
+    case "scissors":
+      flutterTts.speak("forbici");
+      break;
+
+    case "teddy bear":
+      flutterTts.speak("orsacchiotto di peluche");
+      break;
+
+    case "hair drier":
+      flutterTts.speak("asciugacapelli");
+      break;
+
+    case "toothbrush":
+      flutterTts.speak("spazzolino");
+      break;
+  }
+}
+
 notifyElement(String element, double confidence) async {
-  if(confidence >= 75){
-    if(dangElements.contains(element)){
+  if (confidence >= 75) {
+    //forse è meglio abbassarlo a 50%
+    if (dangElements.contains(element)) {
       Vibrate.vibrate();
     }
-    
-    if(element != prevNotified){
+
+    if (element != prevNotified) {
       //await flutterTts.awaitSpeakCompletion(true);
-      flutterTts.speak(element);
+      traduciInItaliano(element);
+      //flutterTts.speak(element);
       prevNotified = element;
     }
   }
 }
-
-
