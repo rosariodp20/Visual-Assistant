@@ -214,7 +214,7 @@ void traduciInItaliano(String element) {
       break;
 
     case "parking meter":
-      flutterTts.speak("parchiemetro");
+      flutterTts.speak("parchimetro");
       break;
 
     case "bench":
@@ -390,7 +390,7 @@ void traduciInItaliano(String element) {
       break;
 
     case "pottedplant":
-      flutterTts.speak("piantina nel vaso");
+      flutterTts.speak("piantina");
       break;
 
     case "bed":
