@@ -79,24 +79,24 @@ class BndBox extends StatelessWidget {
 
     return Stack(children: _renderBoxes());
   }
-}
 
-traduciInItaliano(String element) {
-  flutterTts.speak(ItalianObjects[element]!);
-}
+  void traduciInItaliano(String element) {
+    flutterTts.speak(ItalianObjects[element]!);
+  }
 
-notifyElement(String element, double confidence) async {
-  if (confidence >= 75) {
-    //forse è meglio abbassarlo a 50%
-    if (dangElements.contains(element)) {
-      Vibrate.vibrate();
-    }
+  void notifyElement(String element, double confidence) async {
+    if (confidence >= 75) {
+      //forse è meglio abbassarlo a 50%
+      if (dangElements.contains(element)) {
+        Vibrate.vibrate();
+      }
 
-    if (element != prevNotified) {
-      //await flutterTts.awaitSpeakCompletion(true);
-      traduciInItaliano(element);
+      if (element != prevNotified) {
+        //await flutterTts.awaitSpeakCompletion(true);
+        traduciInItaliano(element);
 
-      prevNotified = element;
+        prevNotified = element;
+      }
     }
   }
 }

@@ -19,27 +19,19 @@ class _DetectionState extends State<Detection> {
   List<dynamic> _recognitions = <dynamic>[];
   int _imageHeight = 0;
   int _imageWidth = 0;
-  String _model = yolo;
+  final String _model = yolo;
 
   @override
   void initState() {
     super.initState();
+    loadModel();
   }
 
   loadModel() async {
-    String res;
-    res = await Tflite.loadModel(
+    await Tflite.loadModel(
       model: "assets/yolov2_tiny.tflite",
       labels: "assets/yolov2_tiny.txt",
     );
-    print(res);
-  }
-
-  onSelect(model) {
-    setState(() {
-      _model = model;
-    });
-    loadModel();
   }
 
   setRecognitions(recognitions, imageHeight, imageWidth) {
@@ -53,7 +45,6 @@ class _DetectionState extends State<Detection> {
   @override
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
-    onSelect(yolo);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Visual Assistant'),
