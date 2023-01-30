@@ -1,15 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:visual_assistant/gestione_preferiti.dart';
-import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
-import 'package:geocoder/services/base.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 import 'dart:convert' as convert;
-import 'dart:isolate';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
@@ -18,24 +12,25 @@ import 'bndbox.dart';
 import 'main.dart';
 import 'models.dart';
 
-class viaggio extends StatefulWidget {
+class Viaggio extends StatefulWidget {
   final double? latitudineOri, longitudineOri; //coordinate origine
   final double? latitudineDest, longitudineDest; //coordinate destinazione
   final List<CameraDescription> cameras;
 
-  const viaggio(this.cameras,
+  const Viaggio(this.cameras,
       {Key? key,
       required this.latitudineOri,
       required this.longitudineOri,
       required this.latitudineDest,
       required this.longitudineDest})
       : super(key: key);
+
   @override
-  State<viaggio> createState() => _viaggioState();
+  State<Viaggio> createState() => _ViaggioState();
 }
 
-class _viaggioState extends State<viaggio> {
-  final String chiave = 'AIzaSyC6L4qS7naD72WZV8llfBAEcAvQyU-PdLE';
+class _ViaggioState extends State<Viaggio> {
+  final String key = 'AIzaSyC6L4qS7naD72WZV8llfBAEcAvQyU-PdLE';
   bool flag = true, flag2 = true, flag3 = true;
   List<dynamic> _recognitions = <dynamic>[];
   int _imageHeight = 0;
@@ -93,25 +88,24 @@ class _viaggioState extends State<viaggio> {
       _imageWidth = imageWidth;
     });
   }
+
   //fine riconoscimento
 
   //indicazioni viaggio
   @override
   Future<void> getDirections(
       double? l1, double? l2, double? l3, double? l4) async {
-    if (flag == true) {
+    if (flag) {
       //avvia la ricerca del percorso solo se il flag è true, perchè se clicchiamo indietro non dobbiamo ricevere più indicazioni su quel percorso (ce ne siamo accorti da terminale)
       //questo url avvia la ricerca del percorso grazie all' api 'Directions'
       final String url =
-          'https://maps.googleapis.com/maps/api/directions/json?origin=$l1%2C$l2&destination=$l3%2C$l4&mode=walking&language=it&key=$chiave';
+          'https://maps.googleapis.com/maps/api/directions/json?origin=$l1%2C$l2&destination=$l3%2C$l4&mode=walking&language=it&key=$key';
 
       var response = await http.get(Uri.parse(url));
-      print(
-          "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
       var json = convert.jsonDecode(response.body);
       String svolta = "";
 
-      if (flag2 == true) {
+      if (flag2) {
         svolta = "fra " +
             json['routes'][0]['legs'][0]['steps'][0]['distance']['text'] +
             " " +
@@ -128,11 +122,11 @@ class _viaggioState extends State<viaggio> {
           "tempo previsto:" +
           json['routes'][0]['legs'][0]['duration']['text'];
       indication = controllaContenutoIndicazioni(indication);
-      if (flag3 == true && flag2 == true) {
+      if (flag3 && flag2) {
         //await flutterTts.awaitSpeakCompletion(true);
         flutterTts.speak(indication);
       } else {
-        if (flag2 == true) {
+        if (flag2) {
           //se le indicazioni sono uguali a quelle della posizione utente allora il percorso non è ancora aggiornato in quanto ad esempio l'utente si trova ancora su quella via
           print("indicazioni:" + svolta);
           flutterTts.speak(svolta);
@@ -216,6 +210,7 @@ class _viaggioState extends State<viaggio> {
       }
     });
   }
+
   //fine indicazioni viaggio
 
   @override
@@ -252,9 +247,9 @@ class _viaggioState extends State<viaggio> {
                 screen.height,
                 screen.width,
                 _model),
-            Align(
+            const Align(
               alignment: Alignment.bottomLeft,
-              child: Container(
+              child: SizedBox(
                 height: 50,
                 width: 50,
               ),

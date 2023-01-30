@@ -6,9 +6,9 @@ import 'package:visual_assistant/main.dart';
 import 'package:visual_assistant/viaggio.dart';
 import 'package:camera/camera.dart';
 
-
 class RicercaPercorso extends StatefulWidget {
   final List<CameraDescription> cameras;
+
   const RicercaPercorso(this.cameras, {Key? key}) : super(key: key);
 
   @override
@@ -82,7 +82,7 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
 
     return AlertDialog(
       title: const Text(''),
-      content: new Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -90,7 +90,7 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
         ],
       ),
       actions: <Widget>[
-        new ElevatedButton(
+        ElevatedButton(
           onPressed: () {
             print("Latitudine origine: $latitudineOri" +
                 " | Longitudine origine: $longitudineOri");
@@ -99,9 +99,9 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
 
             //print("aspe' destinazione");
 
-            Navigator.of(context).push(
+            Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => viaggio(
+                builder: (context) => Viaggio(
                   cameras,
                   latitudineOri: latitudineOri,
                   longitudineOri: longitudineOri,
@@ -112,19 +112,19 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
             );
           },
           style: ElevatedButton.styleFrom(
-            minimumSize: Size(100, 100),
+            minimumSize: const Size(100, 100),
           ),
           child: const Text('Si'),
         ),
-        SizedBox(
+        const SizedBox(
           width: 40,
         ),
-        new ElevatedButton(
+        ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           style: ElevatedButton.styleFrom(
-            minimumSize: Size(100, 100),
+            minimumSize: const Size(100, 100),
           ),
           child: const Text('No'),
         ),
@@ -157,14 +157,14 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.teal,
                 shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(40.0),
+                  borderRadius: BorderRadius.circular(40.0),
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                 minimumSize: const Size(300, 400),
                 //side: BorderSide(width: 4.0, color: Color(0xff68240b)),
-                primary: Colors.teal,
               ),
               onPressed: () => onListen(),
               child: const Text(

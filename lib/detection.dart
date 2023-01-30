@@ -9,10 +9,10 @@ import 'models.dart';
 class Detection extends StatefulWidget {
   final List<CameraDescription> cameras;
 
-  const Detection(this.cameras);
+  const Detection(this.cameras, {Key? key}) : super(key: key);
 
   @override
-  _DetectionState createState() => new _DetectionState();
+  _DetectionState createState() => _DetectionState();
 }
 
 class _DetectionState extends State<Detection> {
