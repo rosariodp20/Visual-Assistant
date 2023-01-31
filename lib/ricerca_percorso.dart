@@ -5,10 +5,10 @@ import 'package:geocoder/geocoder.dart';
 import 'package:visual_assistant/main.dart';
 import 'package:visual_assistant/viaggio.dart';
 import 'package:camera/camera.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RicercaPercorso extends StatefulWidget {
   final List<CameraDescription> cameras;
-
   const RicercaPercorso(this.cameras, {Key? key}) : super(key: key);
 
   @override
@@ -16,6 +16,7 @@ class RicercaPercorso extends StatefulWidget {
 }
 
 class _RicercaPercorsoState extends State<RicercaPercorso> {
+  List<String> cronologiaPercorsi = [];
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _textSpeech = "in attesa dell'indirizzo";
@@ -68,6 +69,19 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
+    recuperaDati();
+  }
+
+  void recuperaDati() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.getStringList('listaCronologiaPercorsi')! != null) {
+      cronologiaPercorsi = prefs.getStringList('listaCronologiaPercorsi')!;
+    }
+  }
+
+  void salvaDati() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList("listaCronologiaPercorsi", cronologiaPercorsi);
   }
 
   Widget _buildPopupDialog(BuildContext context) {
@@ -82,7 +96,7 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
 
     return AlertDialog(
       title: const Text(''),
-      content: Column(
+      content: new Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -90,7 +104,7 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
         ],
       ),
       actions: <Widget>[
-        ElevatedButton(
+        new ElevatedButton(
           onPressed: () {
             print("Latitudine origine: $latitudineOri" +
                 " | Longitudine origine: $longitudineOri");
@@ -99,9 +113,9 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
 
             //print("aspe' destinazione");
 
-            Navigator.of(context).pushReplacement(
+            Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => Viaggio(
+                builder: (context) => viaggio(
                   cameras,
                   latitudineOri: latitudineOri,
                   longitudineOri: longitudineOri,
@@ -110,21 +124,28 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
                 ),
               ),
             );
+            if (cronologiaPercorsi.length == 3) {
+              cronologiaPercorsi.removeAt(0);
+              cronologiaPercorsi.add(_textSpeech);
+            } else {
+              cronologiaPercorsi.add(_textSpeech);
+            }
+            salvaDati();
           },
           style: ElevatedButton.styleFrom(
-            minimumSize: const Size(100, 100),
+            minimumSize: Size(100, 100),
           ),
           child: const Text('Si'),
         ),
-        const SizedBox(
+        SizedBox(
           width: 40,
         ),
-        ElevatedButton(
+        new ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           style: ElevatedButton.styleFrom(
-            minimumSize: const Size(100, 100),
+            minimumSize: Size(100, 100),
           ),
           child: const Text('No'),
         ),
@@ -157,14 +178,14 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40.0),
+                  borderRadius: new BorderRadius.circular(40.0),
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                 minimumSize: const Size(300, 400),
                 //side: BorderSide(width: 4.0, color: Color(0xff68240b)),
+                primary: Colors.teal,
               ),
               onPressed: () => onListen(),
               child: const Text(

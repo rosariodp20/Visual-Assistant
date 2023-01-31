@@ -21,7 +21,7 @@ Future<void> main() async {
   flutterTts.setLanguage("it-IT");
   flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});
   flutterTts.setQueueMode(1);
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -41,26 +41,8 @@ class MyHomePage extends StatelessWidget {
 
   MyHomePage({Key? key}) : super(key: key);
 
-  Border _createBorder(double top, double bottom, double left, double right) {
-    return Border(
-        top: BorderSide(color: Colors.teal, width: top),
-        bottom: BorderSide(color: Colors.teal, width: bottom),
-        left: BorderSide(color: Colors.teal, width: left),
-        right: BorderSide(color: Colors.teal, width: right));
-  }
-
   @override
   Widget build(BuildContext context) {
-    final _buttonHeight = (MediaQuery.of(context).size.height -
-            appBar.preferredSize.height -
-            MediaQuery.of(context).padding.top) *
-        0.5;
-
-    final _buttonWidth = MediaQuery.of(context).size.width * 0.5;
-
-    const _textStyle = TextStyle(
-        fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white);
-
     return Scaffold(
       appBar: appBar,
       body: Column(
@@ -70,14 +52,22 @@ class MyHomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey, border: _createBorder(5, 2.5, 5, 2.5)),
-                height: _buttonHeight,
-                width: _buttonWidth,
+                decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    border: Border(
+                        top: BorderSide(color: Colors.teal, width: 5),
+                        bottom: BorderSide(color: Colors.teal, width: 2.5),
+                        left: BorderSide(color: Colors.teal, width: 5),
+                        right: BorderSide(color: Colors.teal, width: 2.5))),
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const GestionePreferiti()));
+                        builder: (context) => GestionePreferiti(cameras)));
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -85,7 +75,10 @@ class MyHomePage extends StatelessWidget {
                       Icon(Icons.star, color: Colors.white, size: 130),
                       Text(
                         'Destinazioni preferite',
-                        style: _textStyle,
+                        style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                         textAlign: TextAlign.center,
                       )
                     ],
@@ -93,10 +86,18 @@ class MyHomePage extends StatelessWidget {
                 ),
               ),
               Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey, border: _createBorder(5, 2.5, 2.5, 5)),
-                height: _buttonHeight,
-                width: _buttonWidth,
+                decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    border: Border(
+                        top: BorderSide(color: Colors.teal, width: 5),
+                        bottom: BorderSide(color: Colors.teal, width: 2.5),
+                        left: BorderSide(color: Colors.teal, width: 2.5),
+                        right: BorderSide(color: Colors.teal, width: 5))),
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -108,7 +109,10 @@ class MyHomePage extends StatelessWidget {
                       Icon(Icons.camera_alt, color: Colors.white, size: 130),
                       Text(
                         'Riconoscimento',
-                        style: _textStyle,
+                        style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -121,14 +125,22 @@ class MyHomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey, border: _createBorder(2.5, 5, 5, 2.5)),
-                height: _buttonHeight,
-                width: _buttonWidth,
+                decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    border: Border(
+                        top: BorderSide(color: Colors.teal, width: 2.5),
+                        bottom: BorderSide(color: Colors.teal, width: 5),
+                        left: BorderSide(color: Colors.teal, width: 5),
+                        right: BorderSide(color: Colors.teal, width: 2.5))),
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const CronologiaDestinazioni()));
+                        builder: (context) => CronologiaDestinazioni(cameras)));
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -136,7 +148,10 @@ class MyHomePage extends StatelessWidget {
                       Icon(Icons.history, color: Colors.white, size: 130),
                       Text(
                         'Cronologia destinazioni',
-                        style: _textStyle,
+                        style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                         textAlign: TextAlign.center,
                       )
                     ],
@@ -144,14 +159,22 @@ class MyHomePage extends StatelessWidget {
                 ),
               ),
               Container(
-                decoration: BoxDecoration(
-                    color: Colors.grey, border: _createBorder(2.5, 5, 2.5, 5)),
-                height: _buttonHeight,
-                width: _buttonWidth,
+                decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    border: Border(
+                        top: BorderSide(color: Colors.teal, width: 2.5),
+                        bottom: BorderSide(color: Colors.teal, width: 5),
+                        left: BorderSide(color: Colors.teal, width: 2.5),
+                        right: BorderSide(color: Colors.teal, width: 5))),
+                height: (MediaQuery.of(context).size.height -
+                        appBar.preferredSize.height -
+                        MediaQuery.of(context).padding.top) *
+                    0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => RicercaPercorso(cameras)));
+                       builder: (context) => RicercaPercorso(cameras)));
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -159,7 +182,10 @@ class MyHomePage extends StatelessWidget {
                       Icon(Icons.search, color: Colors.white, size: 130),
                       Text(
                         'Ricerca percorso',
-                        style: _textStyle,
+                        style: TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                         textAlign: TextAlign.center,
                       )
                     ],
