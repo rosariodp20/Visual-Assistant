@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'dart:math' as math;
-import 'main.dart';
-import 'objects.dart';
+import '../main.dart';
+import '../models/objects.dart';
 
 String prevNotified = "";
 
-class BndBox extends StatelessWidget {
+class DetectionArea extends StatelessWidget {
   final List<dynamic> results;
   final int previewH;
   final int previewW;
@@ -14,7 +14,7 @@ class BndBox extends StatelessWidget {
   final double screenW;
   final String model;
 
-  const BndBox(this.results, this.previewH, this.previewW, this.screenH,
+  const DetectionArea(this.results, this.previewH, this.previewW, this.screenH,
       this.screenW, this.model,
       {Key? key})
       : super(key: key);
@@ -81,7 +81,7 @@ class BndBox extends StatelessWidget {
   }
 
   void traduciInItaliano(String element) {
-    flutterTts.speak(ItalianObjects[element]!);
+    flutterTts.speak(italianObjects[element]!);
   }
 
   void notifyElement(String element, double confidence) async {

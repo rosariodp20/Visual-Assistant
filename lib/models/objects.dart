@@ -1,4 +1,4 @@
-const ItalianObjects = {
+const italianObjects = {
 "person":"persona",
 "bicycle": "bicicletta",
 "car" : "automobile",

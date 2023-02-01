@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -8,16 +9,17 @@ import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
 import 'camera.dart';
-import 'bndbox.dart';
-import 'main.dart';
-import 'models.dart';
+import '../widgets/detection_area.dart';
+import '../main.dart';
+import '../models/models.dart';
 
-class Viaggio extends StatefulWidget {
+class Path extends StatefulWidget {
   final double? latitudineOri, longitudineOri; //coordinate origine
   final double? latitudineDest, longitudineDest; //coordinate destinazione
   final List<CameraDescription> cameras;
+  final FlutterTts flutterTts;
 
-  const Viaggio(this.cameras,
+  const Path(this.cameras, this.flutterTts,
       {Key? key,
       required this.latitudineOri,
       required this.longitudineOri,
@@ -26,10 +28,10 @@ class Viaggio extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<Viaggio> createState() => _ViaggioState();
+  State<Path> createState() => _PathState();
 }
 
-class _ViaggioState extends State<Viaggio> {
+class _PathState extends State<Path> {
   final String key = 'AIzaSyC6L4qS7naD72WZV8llfBAEcAvQyU-PdLE';
   bool flag = true, flag2 = true, flag3 = true;
   List<dynamic> _recognitions = <dynamic>[];
@@ -92,7 +94,6 @@ class _ViaggioState extends State<Viaggio> {
   //fine riconoscimento
 
   //indicazioni viaggio
-  @override
   Future<void> getDirections(
       double? l1, double? l2, double? l3, double? l4) async {
     if (flag) {
@@ -223,7 +224,7 @@ class _ViaggioState extends State<Viaggio> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Visual Assistant'),
-          backgroundColor: Colors.teal,
+          backgroundColor: Theme.of(context).primaryColor,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -240,7 +241,7 @@ class _ViaggioState extends State<Viaggio> {
               _model,
               setRecognitions,
             ),
-            BndBox(
+            DetectionArea(
                 _recognitions,
                 math.max(_imageHeight, _imageWidth),
                 math.min(_imageHeight, _imageWidth),

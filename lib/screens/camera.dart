@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
-import 'models.dart';
+import '../models/models.dart';
 
 typedef Callback = void Function(List<dynamic> list, int h, int w);
 

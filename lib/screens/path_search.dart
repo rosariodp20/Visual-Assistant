@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:geocoder/geocoder.dart';
 import 'package:visual_assistant/main.dart';
-import 'package:visual_assistant/viaggio.dart';
+import '../widgets/appbar.dart';
+import './path.dart';
 import 'package:camera/camera.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class RicercaPercorso extends StatefulWidget {
+class PathSearch extends StatefulWidget {
   final List<CameraDescription> cameras;
-  const RicercaPercorso(this.cameras, {Key? key}) : super(key: key);
+  final FlutterTts flutterTts;
+
+  const PathSearch(this.cameras, this.flutterTts, {Key? key}) : super(key: key);
 
   @override
-  State<RicercaPercorso> createState() => _RicercaPercorsoState();
+  State<PathSearch> createState() => _PathSearchState();
 }
 
-class _RicercaPercorsoState extends State<RicercaPercorso> {
+class _PathSearchState extends State<PathSearch> {
   List<String> cronologiaPercorsi = [];
   late stt.SpeechToText _speech;
   bool _isListening = false;
-  String _textSpeech = "in attesa dell'indirizzo";
+  String _textSpeech = "In attesa dell'indirizzo.";
   var locationMessage = "";
   double? latitudineOri, longitudineOri; //coordinate origine
   double? latitudineDest, longitudineDest; //coordinate destinazione
@@ -66,6 +70,7 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
     }
   }
 
+  @override
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
@@ -88,7 +93,6 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
     /*FlutterTts flutterTts = FlutterTts();
     flutterTts.setLanguage("it-IT");
     flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});*/
-
     flutterTts.speak("Indica se l'indirizzo " + _textSpeech + " è corretto?");
 
     getCurrentLocation(); //trova la posizione dell'utente
@@ -96,7 +100,7 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
 
     return AlertDialog(
       title: const Text(''),
-      content: new Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -104,7 +108,7 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
         ],
       ),
       actions: <Widget>[
-        new ElevatedButton(
+        ElevatedButton(
           onPressed: () {
             print("Latitudine origine: $latitudineOri" +
                 " | Longitudine origine: $longitudineOri");
@@ -113,10 +117,11 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
 
             //print("aspe' destinazione");
 
-            Navigator.of(context).push(
+            Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => viaggio(
+                builder: (context) => Path(
                   cameras,
+                  flutterTts,
                   latitudineOri: latitudineOri,
                   longitudineOri: longitudineOri,
                   latitudineDest: latitudineDest,
@@ -133,19 +138,19 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
             salvaDati();
           },
           style: ElevatedButton.styleFrom(
-            minimumSize: Size(100, 100),
+            minimumSize: const Size(100, 100),
           ),
           child: const Text('Si'),
         ),
-        SizedBox(
+        const SizedBox(
           width: 40,
         ),
-        new ElevatedButton(
+        ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           style: ElevatedButton.styleFrom(
-            minimumSize: Size(100, 100),
+            minimumSize: const Size(100, 100),
           ),
           child: const Text('No'),
         ),
@@ -156,10 +161,7 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.teal,
-        title: const Text("Visual Assistant"),
-      ),
+      appBar: pageAppBar,
       backgroundColor: Colors.grey[50],
       body: SingleChildScrollView(
         child: Container(
@@ -179,13 +181,12 @@ class _RicercaPercorsoState extends State<RicercaPercorso> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(40.0),
+                  borderRadius: BorderRadius.circular(40.0),
                 ),
+                backgroundColor: Theme.of(context).primaryColor,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                 minimumSize: const Size(300, 400),
-                //side: BorderSide(width: 4.0, color: Color(0xff68240b)),
-                primary: Colors.teal,
               ),
               onPressed: () => onListen(),
               child: const Text(

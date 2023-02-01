@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
-import 'camera.dart';
-import 'bndbox.dart';
-import 'models.dart';
+import './camera.dart';
+import '../widgets/detection_area.dart';
+import '../models/models.dart';
+import '../widgets/appbar.dart';
 
 class Detection extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -46,9 +47,7 @@ class _DetectionState extends State<Detection> {
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Visual Assistant'),
-      ),
+      appBar: pageAppBar,
       body: Stack(
         children: [
           Camera(
@@ -56,7 +55,7 @@ class _DetectionState extends State<Detection> {
             _model,
             setRecognitions,
           ),
-          BndBox(
+          DetectionArea(
               _recognitions,
               math.max(_imageHeight, _imageWidth),
               math.min(_imageHeight, _imageWidth),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:visual_assistant/cronologia_destinazioni.dart';
-import 'package:visual_assistant/gestione_preferiti.dart';
-import 'package:visual_assistant/ricerca_percorso.dart';
+import './screens/history.dart';
+import './screens/favourites.dart';
+import './screens/path_search.dart';
 import 'package:camera/camera.dart';
-import 'detection.dart';
+import 'screens/detection.dart';
+import 'widgets/homepage_button.dart';
+import './widgets/appbar.dart';
 
 late List<CameraDescription> cameras;
 FlutterTts flutterTts = FlutterTts();
@@ -21,7 +23,7 @@ Future<void> main() async {
   flutterTts.setLanguage("it-IT");
   flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});
   flutterTts.setQueueMode(1);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -31,167 +33,75 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Visual Assistant',
-        theme: ThemeData(primarySwatch: Colors.teal),
-        home: MyHomePage());
+        theme: ThemeData(primaryColor: const Color(0xff0d7a9a)),
+        home: const MyHomePage());
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  final appBar = AppBar(title: const Text('Visual Assistant'));
+  const MyHomePage({Key? key}) : super(key: key);
 
-  MyHomePage({Key? key}) : super(key: key);
+  Border _createBorder(
+      Color color, double top, double bottom, double left, double right) {
+    return Border(
+        top: BorderSide(color: color, width: top),
+        bottom: BorderSide(color: color, width: bottom),
+        left: BorderSide(color: color, width: left),
+        right: BorderSide(color: color, width: right));
+  }
 
   @override
   Widget build(BuildContext context) {
+    Color primaryColor = Theme.of(context).primaryColor;
+
+    final _buttonHeight = (MediaQuery.of(context).size.height -
+            homeAppBar.preferredSize.height -
+            MediaQuery.of(context).padding.top) *
+        0.5;
+
+    final _buttonWidth = MediaQuery.of(context).size.width * 0.5;
+
     return Scaffold(
-      appBar: appBar,
+      appBar: homeAppBar,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    border: Border(
-                        top: BorderSide(color: Colors.teal, width: 5),
-                        bottom: BorderSide(color: Colors.teal, width: 2.5),
-                        left: BorderSide(color: Colors.teal, width: 5),
-                        right: BorderSide(color: Colors.teal, width: 2.5))),
-                height: (MediaQuery.of(context).size.height -
-                        appBar.preferredSize.height -
-                        MediaQuery.of(context).padding.top) *
-                    0.5,
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => GestionePreferiti(cameras)));
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Icon(Icons.star, color: Colors.white, size: 130),
-                      Text(
-                        'Destinazioni preferite',
-                        style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                        textAlign: TextAlign.center,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    border: Border(
-                        top: BorderSide(color: Colors.teal, width: 5),
-                        bottom: BorderSide(color: Colors.teal, width: 2.5),
-                        left: BorderSide(color: Colors.teal, width: 2.5),
-                        right: BorderSide(color: Colors.teal, width: 5))),
-                height: (MediaQuery.of(context).size.height -
-                        appBar.preferredSize.height -
-                        MediaQuery.of(context).padding.top) *
-                    0.5,
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Detection(cameras)));
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Icon(Icons.camera_alt, color: Colors.white, size: 130),
-                      Text(
-                        'Riconoscimento',
-                        style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              HomePageButton(
+                  _createBorder(primaryColor, 5, 2, 5, 2.5),
+                  _buttonHeight,
+                  _buttonWidth,
+                  'Gestione preferiti',
+                  Icons.star,
+                  Favourites(cameras)),
+              HomePageButton(
+                  _createBorder(primaryColor, 5, 2.5, 2.5, 5),
+                  _buttonHeight,
+                  _buttonWidth,
+                  'Riconoscimento',
+                  Icons.camera_alt,
+                  Detection(cameras)),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    border: Border(
-                        top: BorderSide(color: Colors.teal, width: 2.5),
-                        bottom: BorderSide(color: Colors.teal, width: 5),
-                        left: BorderSide(color: Colors.teal, width: 5),
-                        right: BorderSide(color: Colors.teal, width: 2.5))),
-                height: (MediaQuery.of(context).size.height -
-                        appBar.preferredSize.height -
-                        MediaQuery.of(context).padding.top) *
-                    0.5,
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => CronologiaDestinazioni(cameras)));
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Icon(Icons.history, color: Colors.white, size: 130),
-                      Text(
-                        'Cronologia destinazioni',
-                        style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                        textAlign: TextAlign.center,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    border: Border(
-                        top: BorderSide(color: Colors.teal, width: 2.5),
-                        bottom: BorderSide(color: Colors.teal, width: 5),
-                        left: BorderSide(color: Colors.teal, width: 2.5),
-                        right: BorderSide(color: Colors.teal, width: 5))),
-                height: (MediaQuery.of(context).size.height -
-                        appBar.preferredSize.height -
-                        MediaQuery.of(context).padding.top) *
-                    0.5,
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                       builder: (context) => RicercaPercorso(cameras)));
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: const [
-                      Icon(Icons.search, color: Colors.white, size: 130),
-                      Text(
-                        'Ricerca percorso',
-                        style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                        textAlign: TextAlign.center,
-                      )
-                    ],
-                  ),
-                ),
-              )
+              HomePageButton(
+                  _createBorder(primaryColor, 2.5, 5, 5, 2.5),
+                  _buttonHeight,
+                  _buttonWidth,
+                  'Cronologia destinazioni',
+                  Icons.history,
+                  History(cameras)),
+              HomePageButton(
+                  _createBorder(primaryColor, 2.5, 5, 2.5, 5),
+                  _buttonHeight,
+                  _buttonWidth,
+                  'Ricerca percorso',
+                  Icons.search,
+                  PathSearch(cameras, flutterTts))
             ],
           ),
         ],
