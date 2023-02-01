@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart';
+import 'package:visual_assistant/screens/detection.dart';
 import 'dart:math' as math;
 import 'camera.dart';
 import '../widgets/detection_area.dart';
@@ -90,7 +91,6 @@ class _PathState extends State<Path> {
       _imageWidth = imageWidth;
     });
   }
-
   //fine riconoscimento
 
   //indicazioni viaggio
@@ -216,48 +216,7 @@ class _PathState extends State<Path> {
 
   @override
   Widget build(BuildContext context) {
-    Size screen = MediaQuery.of(context).size;
     onSelect(yolo);
-
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Visual Assistant'),
-          backgroundColor: Theme.of(context).primaryColor,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              flag = false;
-              Navigator.of(context)
-                  .pop(); //si torna nella pagina di prima -> ricercaDestinazione
-            },
-          ),
-        ),
-        body: Stack(
-          children: [
-            Camera(
-              widget.cameras,
-              _model,
-              setRecognitions,
-            ),
-            DetectionArea(
-                _recognitions,
-                math.max(_imageHeight, _imageWidth),
-                math.min(_imageHeight, _imageWidth),
-                screen.height,
-                screen.width,
-                _model),
-            const Align(
-              alignment: Alignment.bottomLeft,
-              child: SizedBox(
-                height: 50,
-                width: 50,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+    return Detection(cameras);
   }
 }

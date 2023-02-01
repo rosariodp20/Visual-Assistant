@@ -79,7 +79,7 @@ class _PathSearchState extends State<PathSearch> {
 
   void recuperaDati() async {
     final prefs = await SharedPreferences.getInstance();
-    if (prefs.getStringList('listaCronologiaPercorsi')! != null) {
+    if (prefs.getStringList('listaCronologiaPercorsi') != null) {
       cronologiaPercorsi = prefs.getStringList('listaCronologiaPercorsi')!;
     }
   }
@@ -138,6 +138,7 @@ class _PathSearchState extends State<PathSearch> {
             salvaDati();
           },
           style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xff0d7a9a),
             minimumSize: const Size(100, 100),
           ),
           child: const Text('Si'),
@@ -150,6 +151,7 @@ class _PathSearchState extends State<PathSearch> {
             Navigator.of(context).pop();
           },
           style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xff0d7a9a),
             minimumSize: const Size(100, 100),
           ),
           child: const Text('No'),

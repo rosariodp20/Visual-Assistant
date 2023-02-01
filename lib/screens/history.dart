@@ -277,7 +277,8 @@ class _HistoryState extends State<History> {
 
   /////////////////////////////////////////////////////////////////////////
   Widget dialogEliminaPreferito(BuildContext context, String butt) {
-    //flutterTts.speak("Il limite di 3 preferiti è stato raggiunto. Aggiungendo il seguente indirizzo verrà rimosso il primo dalla lista dei preferiti. Continuare?");
+    flutterTts.speak(
+        "Il limite di 3 preferiti è stato raggiunto. Aggiungendo il seguente indirizzo verrà rimosso il primo dalla lista dei preferiti. Continuare?");
     return AlertDialog(
       title: const Text(''),
       content: Column(
@@ -303,6 +304,7 @@ class _HistoryState extends State<History> {
             }
           },
           style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xff0d7a9a),
             minimumSize: const Size(100, 100),
           ),
           child: const Text('Si'),
@@ -315,6 +317,7 @@ class _HistoryState extends State<History> {
             Navigator.of(context).pop();
           },
           style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xff0d7a9a),
             minimumSize: const Size(100, 100),
           ),
           child: const Text('No'),
@@ -328,232 +331,223 @@ class _HistoryState extends State<History> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: pageAppBar,
-        backgroundColor: Colors.grey[50],
-        body: SingleChildScrollView(
-            child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(30),
-                child: Column(children: [
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 18),
-                            backgroundColor:
-                                const Color.fromRGBO(176, 224, 230, 1),
-                            minimumSize: const Size(230, 100),
-                          ),
-                          onPressed: _percorsoUnoVuoto
-                              ? null
-                              : () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Path(
-                                        cameras,
-                                        flutterTts,
-                                        latitudineOri: latitudineOri,
-                                        longitudineOri: longitudineOri,
-                                        latitudineDest: latitudineDest1,
-                                        longitudineDest: longitudineDest1,
-                                      ),
-                                    ),
-                                  );
-                                },
-                          child: Text(
-                            cronologiaPercorsi[0],
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                            ),
-                          )),
-                      Semantics(
-                          label: stella1,
-                          excludeSemantics: true,
-                          child: ElevatedButton.icon(
-                            onPressed: _percorsoUnoVuoto
-                                ? null
-                                : () {
-                                    if (percorsiPreferiti.length == 3 &&
-                                        col1 == 255) {
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            dialogEliminaPreferito(
-                                                context, 'but1'),
-                                      );
-                                    } else {
-                                      aggiungiPreferiti1();
-                                    }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(20, 100),
-                              backgroundColor:
-                                  const Color.fromRGBO(176, 224, 230, 1),
-                              padding:
-                                  const EdgeInsets.only(left: 17, right: 10),
-                            ),
-                            icon: Icon(
-                              Icons.star,
-                              color: Color.fromRGBO(col1, col2, col3, 1),
-                            ),
-                            //Icon(Icons.star),
-                            label: const Text(""),
-                          ))
-                    ],
-                  ),
-                  Row(
-                    children: const [SizedBox(height: 30)],
-                  ),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 18),
-                            backgroundColor:
-                                const Color.fromRGBO(176, 224, 230, 1),
-                            minimumSize: const Size(230, 100),
-                          ),
-                          onPressed: _percorsoDueVuoto
-                              ? null
-                              : () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Path(
-                                        cameras,
-                                        flutterTts,
-                                        latitudineOri: latitudineOri,
-                                        longitudineOri: longitudineOri,
-                                        latitudineDest: latitudineDest2,
-                                        longitudineDest: longitudineDest2,
-                                      ),
-                                    ),
-                                  );
-                                },
-                          child: Text(
-                            cronologiaPercorsi[1],
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                            ),
-                          )),
-                      Semantics(
-                          label: stella2,
-                          excludeSemantics: true,
-                          child: ElevatedButton.icon(
-                            onPressed: _percorsoDueVuoto
-                                ? null
-                                : () {
-                                    if (percorsiPreferiti.length == 3 &&
-                                        col4 == 255) {
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            dialogEliminaPreferito(
-                                                context, 'but2'),
-                                      );
-                                    } else {
-                                      aggiungiPreferiti2();
-                                    }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(20, 100),
-                              backgroundColor:
-                                  const Color.fromRGBO(176, 224, 230, 1),
-                              padding:
-                                  const EdgeInsets.only(left: 17, right: 10),
-                            ),
-                            icon: Icon(
-                              Icons.star,
-                              color: Color.fromRGBO(col4, col5, col6, 1),
-                            ),
-                            //Icon(Icons.star),
-                            label: const Text(""),
-                          ))
-                    ],
-                  ),
-                  Row(
-                    children: const [SizedBox(height: 30)],
-                  ),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 18),
-                            backgroundColor:
-                                const Color.fromRGBO(176, 224, 230, 1),
-                            minimumSize: const Size(230, 100),
-                          ),
-                          onPressed: _percorsoTreVuoto
-                              ? null
-                              : () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Path(
-                                        cameras,
-                                        flutterTts,
-                                        latitudineOri: latitudineOri,
-                                        longitudineOri: longitudineOri,
-                                        latitudineDest: latitudineDest3,
-                                        longitudineDest: longitudineDest3,
-                                      ),
-                                    ),
-                                  );
-                                },
-                          child: Text(
-                            cronologiaPercorsi[2],
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                            ),
-                          )),
-                      Semantics(
-                          label: stella3,
-                          excludeSemantics: true,
-                          child: ElevatedButton.icon(
-                            onPressed: _percorsoTreVuoto
-                                ? null
-                                : () {
-                                    if (percorsiPreferiti.length == 3 &&
-                                        col7 == 255) {
-                                      showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            dialogEliminaPreferito(
-                                                context, 'but3'),
-                                      );
-                                    } else {
-                                      aggiungiPreferiti3();
-                                    }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(20, 100),
-                              backgroundColor:
-                                  const Color.fromRGBO(176, 224, 230, 1),
-                              padding:
-                                  const EdgeInsets.only(left: 17, right: 10),
-                            ),
-                            icon: Icon(
-                              Icons.star,
-                              color: Color.fromRGBO(col7, col8, col9, 1),
-                            ),
-                            //Icon(Icons.star),
-                            label: const Text(""),
-                          ))
-                    ],
-                  )
-                ]))));
+      appBar: pageAppBar,
+      backgroundColor: Colors.grey[50],
+      body: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(30),
+          child: Column(children: [
+            const SizedBox(
+              height: 30,
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 18),
+                      backgroundColor: const Color(0xff0d7a9a),
+                      minimumSize: const Size(230, 100),
+                    ),
+                    onPressed: _percorsoUnoVuoto
+                        ? null
+                        : () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Path(
+                                  cameras,
+                                  flutterTts,
+                                  latitudineOri: latitudineOri,
+                                  longitudineOri: longitudineOri,
+                                  latitudineDest: latitudineDest1,
+                                  longitudineDest: longitudineDest1,
+                                ),
+                              ),
+                            );
+                          },
+                    child: Text(
+                      cronologiaPercorsi[0],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    )),
+                Semantics(
+                    label: stella1,
+                    excludeSemantics: true,
+                    child: ElevatedButton.icon(
+                      onPressed: _percorsoUnoVuoto
+                          ? null
+                          : () {
+                              if (percorsiPreferiti.length == 3 &&
+                                  col1 == 255) {
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      dialogEliminaPreferito(context, 'but1'),
+                                );
+                              } else {
+                                aggiungiPreferiti1();
+                              }
+                            },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(20, 100),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        padding: const EdgeInsets.only(left: 17, right: 10),
+                      ),
+                      icon: Icon(
+                        Icons.star,
+                        color: Color.fromRGBO(col1, col2, col3, 1),
+                      ),
+                      //Icon(Icons.star),
+                      label: const Text(""),
+                    ))
+              ],
+            ),
+            Row(
+              children: const [SizedBox(height: 30)],
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 18),
+                      backgroundColor: const Color(0xff0d7a9a),
+                      minimumSize: const Size(230, 100),
+                    ),
+                    onPressed: _percorsoDueVuoto
+                        ? null
+                        : () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Path(
+                                  cameras,
+                                  flutterTts,
+                                  latitudineOri: latitudineOri,
+                                  longitudineOri: longitudineOri,
+                                  latitudineDest: latitudineDest2,
+                                  longitudineDest: longitudineDest2,
+                                ),
+                              ),
+                            );
+                          },
+                    child: Text(
+                      cronologiaPercorsi[1],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    )),
+                Semantics(
+                    label: stella2,
+                    excludeSemantics: true,
+                    child: ElevatedButton.icon(
+                      onPressed: _percorsoDueVuoto
+                          ? null
+                          : () {
+                              if (percorsiPreferiti.length == 3 &&
+                                  col4 == 255) {
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      dialogEliminaPreferito(context, 'but2'),
+                                );
+                              } else {
+                                aggiungiPreferiti2();
+                              }
+                            },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(20, 100),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        padding: const EdgeInsets.only(left: 17, right: 10),
+                      ),
+                      icon: Icon(
+                        Icons.star,
+                        color: Color.fromRGBO(col4, col5, col6, 1),
+                      ),
+                      //Icon(Icons.star),
+                      label: const Text(""),
+                    ))
+              ],
+            ),
+            Row(
+              children: const [SizedBox(height: 30)],
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 18),
+                      backgroundColor: const Color(0xff0d7a9a),
+                      minimumSize: const Size(230, 100),
+                    ),
+                    onPressed: _percorsoTreVuoto
+                        ? null
+                        : () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Path(
+                                  cameras,
+                                  flutterTts,
+                                  latitudineOri: latitudineOri,
+                                  longitudineOri: longitudineOri,
+                                  latitudineDest: latitudineDest3,
+                                  longitudineDest: longitudineDest3,
+                                ),
+                              ),
+                            );
+                          },
+                    child: Text(
+                      cronologiaPercorsi[2],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    )),
+                Semantics(
+                    label: stella3,
+                    excludeSemantics: true,
+                    child: ElevatedButton.icon(
+                      onPressed: _percorsoTreVuoto
+                          ? null
+                          : () {
+                              if (percorsiPreferiti.length == 3 &&
+                                  col7 == 255) {
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      dialogEliminaPreferito(context, 'but3'),
+                                );
+                              } else {
+                                aggiungiPreferiti3();
+                              }
+                            },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(20, 100),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        padding: const EdgeInsets.only(left: 17, right: 10),
+                      ),
+                      icon: Icon(
+                        Icons.star,
+                        color: Color.fromRGBO(col7, col8, col9, 1),
+                      ),
+                      //Icon(Icons.star),
+                      label: const Text(""),
+                    ))
+              ],
+            )
+          ]),
+        ),
+      ),
+    );
   }
 }

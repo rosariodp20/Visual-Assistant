@@ -266,199 +266,193 @@ class _FavouritesState extends State<Favourites> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: pageAppBar,
-        backgroundColor: Colors.grey[50],
-        body: SingleChildScrollView(
-            child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(30),
-                child: Column(children: [
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 18),
-                            backgroundColor:
-                                const Color.fromRGBO(176, 224, 230, 1),
-                            minimumSize: const Size(230, 100),
-                          ),
-                          onPressed: _percorsoUnoVuoto
-                              ? null
-                              : () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Path(
-                                        cameras,
-                                        flutterTts,
-                                        latitudineOri: latitudineOri,
-                                        longitudineOri: longitudineOri,
-                                        latitudineDest: latitudineDest1,
-                                        longitudineDest: longitudineDest1,
-                                      ),
-                                    ),
-                                  );
-                                },
-                          child: Text(
-                            pref1,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                            ),
-                          )),
-                      Semantics(
-                          label: "Rimuovi dai preferiti",
-                          excludeSemantics: true,
-                          child: ElevatedButton.icon(
-                            onPressed: _percorsoUnoVuoto
-                                ? null
-                                : () {
-                                    rimuoviPreferiti('but1');
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(20, 100),
-                              backgroundColor:
-                                  const Color.fromRGBO(176, 224, 230, 1),
-                              padding:
-                                  const EdgeInsets.only(left: 17, right: 10),
-                            ),
-                            icon: Icon(
-                              Icons.star,
-                              color: Color.fromRGBO(col1, col2, col3, 1),
-                            ),
-                            //Icon(Icons.star),
-                            label: const Text(""),
-                          ))
-                    ],
-                  ),
-                  Row(
-                    children: const [SizedBox(height: 30)],
-                  ),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 18),
-                            backgroundColor:
-                                const Color.fromRGBO(176, 224, 230, 1),
-                            minimumSize: const Size(230, 100),
-                          ),
-                          onPressed: _percorsoDueVuoto
-                              ? null
-                              : () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Path(
-                                        cameras,
-                                        flutterTts,
-                                        latitudineOri: latitudineOri,
-                                        longitudineOri: longitudineOri,
-                                        latitudineDest: latitudineDest2,
-                                        longitudineDest: longitudineDest2,
-                                      ),
-                                    ),
-                                  );
-                                },
-                          child: Text(
-                            pref2,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                            ),
-                          )),
-                      Semantics(
-                          label: "Rimuovi dai preferiti",
-                          excludeSemantics: true,
-                          child: ElevatedButton.icon(
-                            onPressed: _percorsoDueVuoto
-                                ? null
-                                : () {
-                                    rimuoviPreferiti('but2');
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(20, 100),
-                              backgroundColor:
-                                  const Color.fromRGBO(176, 224, 230, 1),
-                              padding:
-                                  const EdgeInsets.only(left: 17, right: 10),
-                            ),
-                            icon: Icon(
-                              Icons.star,
-                              color: Color.fromRGBO(col4, col5, col6, 1),
-                            ),
-                            //Icon(Icons.star),
-                            label: const Text(""),
-                          ))
-                    ],
-                  ),
-                  Row(
-                    children: const [SizedBox(height: 30)],
-                  ),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 18),
-                            backgroundColor:
-                                const Color.fromRGBO(176, 224, 230, 1),
-                            minimumSize: const Size(230, 100),
-                          ),
-                          onPressed: _percorsoTreVuoto
-                              ? null
-                              : () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => Path(
-                                        cameras,
-                                        flutterTts,
-                                        latitudineOri: latitudineOri,
-                                        longitudineOri: longitudineOri,
-                                        latitudineDest: latitudineDest3,
-                                        longitudineDest: longitudineDest3,
-                                      ),
-                                    ),
-                                  );
-                                },
-                          child: Text(
-                            pref3,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 10,
-                            ),
-                          )),
-                      Semantics(
-                          label: "Rimuovi dai preferiti",
-                          excludeSemantics: true,
-                          child: ElevatedButton.icon(
-                            onPressed: _percorsoTreVuoto
-                                ? null
-                                : () {
-                                    rimuoviPreferiti('but3');
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(20, 100),
-                              backgroundColor:
-                                  const Color.fromRGBO(176, 224, 230, 1),
-                              padding:
-                                  const EdgeInsets.only(left: 17, right: 10),
-                            ),
-                            icon: Icon(
-                              Icons.star,
-                              color: Color.fromRGBO(col7, col8, col9, 1),
-                            ),
-                            //Icon(Icons.star),
-                            label: const Text(""),
-                          ))
-                    ],
-                  )
-                ]))));
+      appBar: pageAppBar,
+      backgroundColor: Colors.grey[50],
+      body: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(30),
+          child: Column(children: [
+            const SizedBox(
+              height: 30,
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 18),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        minimumSize: const Size(230, 100)),
+                    onPressed: _percorsoUnoVuoto
+                        ? null
+                        : () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Path(
+                                  cameras,
+                                  flutterTts,
+                                  latitudineOri: latitudineOri,
+                                  longitudineOri: longitudineOri,
+                                  latitudineDest: latitudineDest1,
+                                  longitudineDest: longitudineDest1,
+                                ),
+                              ),
+                            );
+                          },
+                    child: Text(
+                      pref1,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    )),
+                Semantics(
+                    label: "Rimuovi dai preferiti",
+                    excludeSemantics: true,
+                    child: ElevatedButton.icon(
+                      onPressed: _percorsoUnoVuoto
+                          ? null
+                          : () {
+                              rimuoviPreferiti('but1');
+                            },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(20, 100),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        padding: const EdgeInsets.only(left: 17, right: 10),
+                      ),
+                      icon: Icon(
+                        Icons.star,
+                        color: Color.fromRGBO(col1, col2, col3, 1),
+                      ),
+                      //Icon(Icons.star),
+                      label: const Text(""),
+                    ))
+              ],
+            ),
+            Row(
+              children: const [SizedBox(height: 30)],
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 18),
+                      backgroundColor: const Color(0xff0d7a9a),
+                      minimumSize: const Size(230, 100),
+                    ),
+                    onPressed: _percorsoDueVuoto
+                        ? null
+                        : () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Path(
+                                  cameras,
+                                  flutterTts,
+                                  latitudineOri: latitudineOri,
+                                  longitudineOri: longitudineOri,
+                                  latitudineDest: latitudineDest2,
+                                  longitudineDest: longitudineDest2,
+                                ),
+                              ),
+                            );
+                          },
+                    child: Text(
+                      pref2,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    )),
+                Semantics(
+                    label: "Rimuovi dai preferiti",
+                    excludeSemantics: true,
+                    child: ElevatedButton.icon(
+                      onPressed: _percorsoDueVuoto
+                          ? null
+                          : () {
+                              rimuoviPreferiti('but2');
+                            },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(20, 100),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.only(left: 17, right: 10),
+                      ),
+                      icon: Icon(
+                        Icons.star,
+                        color: Color.fromRGBO(col4, col5, col6, 1),
+                      ),
+                      //Icon(Icons.star),
+                      label: const Text(""),
+                    ))
+              ],
+            ),
+            Row(
+              children: const [SizedBox(height: 30)],
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 18),
+                      backgroundColor: const Color(0xff0d7a9a),
+                      minimumSize: const Size(230, 100),
+                    ),
+                    onPressed: _percorsoTreVuoto
+                        ? null
+                        : () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Path(
+                                  cameras,
+                                  flutterTts,
+                                  latitudineOri: latitudineOri,
+                                  longitudineOri: longitudineOri,
+                                  latitudineDest: latitudineDest3,
+                                  longitudineDest: longitudineDest3,
+                                ),
+                              ),
+                            );
+                          },
+                    child: Text(
+                      pref3,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                      ),
+                    )),
+                Semantics(
+                    label: "Rimuovi dai preferiti",
+                    excludeSemantics: true,
+                    child: ElevatedButton.icon(
+                      onPressed: _percorsoTreVuoto
+                          ? null
+                          : () {
+                              rimuoviPreferiti('but3');
+                            },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(20, 100),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        padding: const EdgeInsets.only(left: 17, right: 10),
+                      ),
+                      icon: Icon(
+                        Icons.star,
+                        color: Color.fromRGBO(col7, col8, col9, 1),
+                      ),
+                      //Icon(Icons.star),
+                      label: const Text(""),
+                    ))
+              ],
+            )
+          ]),
+        ),
+      ),
+    );
   }
 }

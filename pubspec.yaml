@@ -48,6 +48,7 @@ dependencies:
   flutter_svg: ^1.1.6
   location: ^4.4.0
   flutter_vibrate: ^1.3.0
+  flutter_launcher_icons: ^0.11.0
   shared_preferences:
 
 dev_dependencies:
@@ -60,6 +61,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/Visual-Assistant-Logo.jpg"
 
 
 # For information on the generic Dart part of this file, see the

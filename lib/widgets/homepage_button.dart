@@ -15,34 +15,36 @@ class HomePageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(color: Colors.grey, border: border),
-        height: buttonHeight,
-        width: buttonWidth,
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => widgetPage));
-          },
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Icon(
-                  buttonIcon,
-                  color: Colors.white,
-                  size: 130,
+      decoration: BoxDecoration(color: Colors.grey, border: border),
+      height: buttonHeight,
+      width: buttonWidth,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => widgetPage));
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              buttonIcon,
+              color: Colors.white,
+              size: 130,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  buttonText,
+                  style: _textStyle,
+                  textAlign: TextAlign.center,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: Text(
-                      buttonText,
-                      style: _textStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                )
-              ]),
-        ));
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
