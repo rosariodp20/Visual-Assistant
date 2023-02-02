@@ -47,7 +47,6 @@ class _DetectionState extends State<Detection> {
   Widget build(BuildContext context) {
     Size screen = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: pageAppBar,
       body: Stack(
         children: [
           Camera(

@@ -67,32 +67,6 @@ class _PathState extends State<Path> {
     });
   }
 
-  //riconoscimento
-  loadModel() async {
-    String res;
-    res = await Tflite.loadModel(
-      model: "assets/yolov2_tiny.tflite",
-      labels: "assets/yolov2_tiny.txt",
-    );
-    print(res);
-  }
-
-  onSelect(model) {
-    setState(() {
-      _model = model;
-    });
-    loadModel();
-  }
-
-  setRecognitions(recognitions, imageHeight, imageWidth) {
-    setState(() {
-      _recognitions = recognitions;
-      _imageHeight = imageHeight;
-      _imageWidth = imageWidth;
-    });
-  }
-  //fine riconoscimento
-
   //indicazioni viaggio
   Future<void> getDirections(
       double? l1, double? l2, double? l3, double? l4) async {
@@ -216,7 +190,23 @@ class _PathState extends State<Path> {
 
   @override
   Widget build(BuildContext context) {
-    onSelect(yolo);
-    return Detection(cameras);
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Visual Assistant'),
+          backgroundColor: Theme.of(context).primaryColor,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              flag = false;
+              Navigator.of(context)
+                  .pop(); //si torna nella pagina di prima -> ricercaDestinazione
+            },
+          ),
+        ),
+        body: Detection(cameras),
+      ),
+    );
   }
 }
