@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:visual_assistant/utils/shared_preferences_instance.dart';
 import './screens/history.dart';
 import './screens/favourites.dart';
 import './screens/path_search.dart';
@@ -14,6 +15,11 @@ FlutterTts flutterTts = FlutterTts();
 //Bisogna runnare con: flutter run --no-sound-null-safety
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize SharedPreferences
+  // This call loads in memory an instance of SharedPreferences
+  SharedPreferencesInstance();
+
   try {
     cameras = await availableCameras();
   } on CameraException catch (e) {

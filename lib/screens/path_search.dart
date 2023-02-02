@@ -163,7 +163,7 @@ class _PathSearchState extends State<PathSearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: pageAppBar,
+      appBar: CustomAppBar(),
       backgroundColor: Colors.grey[50],
       body: SingleChildScrollView(
         child: Container(

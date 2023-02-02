@@ -6,13 +6,9 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:camera/camera.dart';
-import 'package:tflite/tflite.dart';
 import 'package:visual_assistant/screens/detection.dart';
-import 'dart:math' as math;
-import 'camera.dart';
-import '../widgets/detection_area.dart';
+import 'package:visual_assistant/widgets/appbar.dart';
 import '../main.dart';
-import '../models/models.dart';
 
 class Path extends StatefulWidget {
   final double? latitudineOri, longitudineOri; //coordinate origine
@@ -35,10 +31,6 @@ class Path extends StatefulWidget {
 class _PathState extends State<Path> {
   final String key = 'AIzaSyC6L4qS7naD72WZV8llfBAEcAvQyU-PdLE';
   bool flag = true, flag2 = true, flag3 = true;
-  List<dynamic> _recognitions = <dynamic>[];
-  int _imageHeight = 0;
-  int _imageWidth = 0;
-  String _model = yolo;
   double? latOrigine;
   double? longOrigine;
   double? latDestinazione;
@@ -193,18 +185,11 @@ class _PathState extends State<Path> {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Visual Assistant'),
-          backgroundColor: Theme.of(context).primaryColor,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              flag = false;
-              Navigator.of(context)
-                  .pop(); //si torna nella pagina di prima -> ricercaDestinazione
-            },
-          ),
-        ),
+        appBar: CustomAppBar(onBackPressed: () {
+          flag = false;
+          Navigator.of(context)
+              .pop(); //si torna nella pagina di prima -> ricercaDestinazione
+        }),
         body: Detection(cameras),
       ),
     );

@@ -5,7 +5,6 @@ import 'dart:math' as math;
 import './camera.dart';
 import '../widgets/detection_area.dart';
 import '../models/models.dart';
-import '../widgets/appbar.dart';
 
 class Detection extends StatefulWidget {
   final List<CameraDescription> cameras;

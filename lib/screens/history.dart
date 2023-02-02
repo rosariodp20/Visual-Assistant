@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:camera/camera.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:visual_assistant/controller/favourites_controller.dart';
+import 'package:visual_assistant/controller/history_controller.dart';
 import '../widgets/appbar.dart';
 import '../main.dart';
 import 'path.dart';
@@ -17,6 +18,11 @@ class History extends StatefulWidget {
 }
 
 class _HistoryState extends State<History> {
+  final HistoryController _historyController = HistoryController.instance;
+  final FavouritesController _favouritesController =
+      FavouritesController.instance;
+
+  // State
   List<String> cronologiaPercorsi = ['vuoto', 'vuoto', 'vuoto'];
   List<String> percorsiPreferiti = [];
   int col1 = 255;
@@ -34,6 +40,8 @@ class _HistoryState extends State<History> {
   bool _percorsoUnoVuoto = false;
   bool _percorsoDueVuoto = false;
   bool _percorsoTreVuoto = false;
+
+  // No state
   double? latitudineOri, longitudineOri; //coordinate origine
   double? latitudineDest1,
       longitudineDest1,
@@ -139,30 +147,24 @@ class _HistoryState extends State<History> {
   }
 
   void funzioneAspettaRecupera() async {
-    await recuperaDati();
-    await recuperaDatiPreferiti();
-    await inizializzaPreferiti();
-    await getCurrentLocation();
+    recuperaDati();
+    recuperaDatiPreferiti();
+    inizializzaPreferiti();
+
     try {
+      await getCurrentLocation();
       await convertiDestinazioneinCoordinate1(cronologiaPercorsi[0]);
-    } catch (e) {
-      print('errore');
-    }
-    try {
       await convertiDestinazioneinCoordinate2(cronologiaPercorsi[1]);
-    } catch (e) {
-      print('errore');
-    }
-    try {
       await convertiDestinazioneinCoordinate3(cronologiaPercorsi[2]);
     } catch (e) {
       print('errore');
     }
   }
 
-  Future<void> inizializzaPreferiti() async {
+  void inizializzaPreferiti() {
     print(percorsiPreferiti);
     print(cronologiaPercorsi);
+
     if (percorsiPreferiti.contains(cronologiaPercorsi[0])) {
       setState(() {
         col1 = 228;
@@ -171,6 +173,7 @@ class _HistoryState extends State<History> {
         stella1 = 'Rimuovi dai preferiti';
       });
     }
+
     if (percorsiPreferiti.contains(cronologiaPercorsi[1])) {
       setState(() {
         col4 = 228;
@@ -179,6 +182,7 @@ class _HistoryState extends State<History> {
         stella2 = 'Rimuovi dai preferiti';
       });
     }
+
     if (percorsiPreferiti.contains(cronologiaPercorsi[2])) {
       setState(() {
         col7 = 228;
@@ -207,72 +211,51 @@ class _HistoryState extends State<History> {
     print('aaaaaaaaa');
   }
 
-  void salvaDati(value) async {
-    final prefs = await SharedPreferences.getInstance();
-    if (value == 'add1') {
-      if (percorsiPreferiti.length < 3) {
-        percorsiPreferiti.add(cronologiaPercorsi[0]);
-      } else {
-        percorsiPreferiti.removeAt(0);
-        percorsiPreferiti.add(cronologiaPercorsi[0]);
-      }
-    }
-    if (value == 'add2') {
-      if (percorsiPreferiti.length < 3) {
-        percorsiPreferiti.add(cronologiaPercorsi[1]);
-      } else {
-        percorsiPreferiti.removeAt(0);
-        percorsiPreferiti.add(cronologiaPercorsi[1]);
-      }
-    }
-    if (value == 'add3') {
-      if (percorsiPreferiti.length < 3) {
-        percorsiPreferiti.add(cronologiaPercorsi[2]);
-      } else {
-        percorsiPreferiti.removeAt(0);
-        percorsiPreferiti.add(cronologiaPercorsi[2]);
-      }
-    }
-    if (value == 'remove1') {
-      if (percorsiPreferiti.contains(cronologiaPercorsi[0])) {
-        percorsiPreferiti.remove(cronologiaPercorsi[0]);
-      }
-    }
-    if (value == 'remove2') {
-      if (percorsiPreferiti.contains(cronologiaPercorsi[1])) {
-        percorsiPreferiti.remove(cronologiaPercorsi[1]);
-      }
-    }
-    if (value == 'remove3') {
-      if (percorsiPreferiti.contains(cronologiaPercorsi[2])) {
-        percorsiPreferiti.remove(cronologiaPercorsi[2]);
-      }
-    }
+  void salvaDati(String value) {
+    List<String> history = _historyController.getHistoryList();
 
-    prefs.setStringList("listaPercorsiPreferiti", percorsiPreferiti);
+    switch (value) {
+      case ('add1'):
+        _favouritesController.addToFavouritesByAddress(history[0]);
+        break;
+      case ('add2'):
+        _favouritesController.addToFavouritesByAddress(history[1]);
+        break;
+      case ('add3'):
+        _favouritesController.addToFavouritesByAddress(history[2]);
+        break;
+      case ('remove1'):
+        _favouritesController.removeByAddress(history[0]);
+        break;
+      case ('remove2'):
+        _favouritesController.removeByAddress(history[1]);
+        break;
+      case ('remove3'):
+        _favouritesController.removeByAddress(history[2]);
+        break;
+    }
     print(percorsiPreferiti);
   }
 
-  Future<void> recuperaDati() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getStringList('listaCronologiaPercorsi') != null) {
-      cronologiaPercorsi = prefs.getStringList('listaCronologiaPercorsi')!;
-      setState(() {
-        if (cronologiaPercorsi.length == 1) {
-          cronologiaPercorsi.add('vuoto');
-          cronologiaPercorsi.add('vuoto');
-        } else if (cronologiaPercorsi.length == 2) {
-          cronologiaPercorsi.add('vuoto');
-        }
-      });
+  void recuperaDati() {
+    final pathsHistory = _historyController.getHistoryList();
+
+    // We save a rebuild...
+    if (pathsHistory.isEmpty) return;
+
+    for (int i = pathsHistory.length; i < 3; i++) {
+      pathsHistory.add('vuoto');
     }
+
+    setState(() {
+      cronologiaPercorsi = pathsHistory;
+    });
   }
 
-  Future<void> recuperaDatiPreferiti() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getStringList('listaPercorsiPreferiti') != null) {
-      percorsiPreferiti = prefs.getStringList('listaPercorsiPreferiti')!;
-    }
+  void recuperaDatiPreferiti() {
+    setState((){
+      percorsiPreferiti = _favouritesController.getFavouritesList();
+    });
   }
 
   /////////////////////////////////////////////////////////////////////////
@@ -331,7 +314,7 @@ class _HistoryState extends State<History> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: pageAppBar,
+      appBar: const CustomAppBar(),
       backgroundColor: Colors.grey[50],
       body: SingleChildScrollView(
         child: Container(
