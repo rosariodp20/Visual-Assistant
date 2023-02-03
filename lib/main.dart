@@ -8,6 +8,7 @@ import './screens/path_search.dart';
 import './screens/detection.dart';
 import './widgets/homepage_button.dart';
 import './widgets/appbar.dart';
+import 'package:flutter/services.dart';
 
 late List<CameraDescription> cameras;
 FlutterTts flutterTts = FlutterTts();
@@ -35,8 +36,12 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  @override
+    @override
   Widget build(BuildContext context) {
+SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
     return MaterialApp(
         title: 'Visual Assistant',
         theme: ThemeData(primaryColor: const Color(0xff0d7a9a)),
