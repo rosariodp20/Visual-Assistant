@@ -6,8 +6,8 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import 'package:camera/camera.dart';
-import 'package:visual_assistant/screens/detection.dart';
-import 'package:visual_assistant/widgets/appbar.dart';
+import '../screens/detection.dart';
+import '../widgets/appbar.dart';
 import '../main.dart';
 
 class Path extends StatefulWidget {

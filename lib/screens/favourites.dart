@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:visual_assistant/controller/favourites_controller.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import '../controller/favourites_controller.dart';
 import '../widgets/appbar.dart';
-import 'package:visual_assistant/main.dart';
+import '../main.dart';
 import './path.dart';
 
 class Favourites extends StatefulWidget {
@@ -216,47 +217,58 @@ class _FavouritesState extends State<Favourites> {
     return Scaffold(
       appBar: const CustomAppBar(),
       backgroundColor: Colors.grey[50],
-      body: SingleChildScrollView(
-        child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(30),
-          child: Column(children: [
-            const SizedBox(
-              height: 30,
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 50),
+              child: const Text(
+                'Destinazioni Preferite',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  margin: const EdgeInsets.symmetric(vertical: 60),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
                         //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 18),
                         backgroundColor: const Color(0xff0d7a9a),
-                        minimumSize: const Size(230, 100)),
-                    onPressed: () {
-                      if (_percorsoUnoVuoto) return;
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Path(
-                            cameras,
-                            flutterTts,
-                            latitudineOri: latitudineOri,
-                            longitudineOri: longitudineOri,
-                            latitudineDest: latitudineDest1,
-                            longitudineDest: longitudineDest1,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      pref1,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
+                        minimumSize: const Size(230, 100),
                       ),
-                    )),
+                      onPressed: _percorsoUnoVuoto
+                          ? null
+                          : () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Path(
+                                    cameras,
+                                    flutterTts,
+                                    latitudineOri: latitudineOri,
+                                    longitudineOri: longitudineOri,
+                                    latitudineDest: latitudineDest1,
+                                    longitudineDest: longitudineDest1,
+                                  ),
+                                ),
+                              );
+                            },
+                      child: AutoSizeText(
+                        pref1,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                        ),
+                      )),
+                ),
                 Semantics(
-                    label: "Rimuovi dai preferiti",
+                    label: 'Rimuovi dai preferiti',
                     excludeSemantics: true,
                     child: ElevatedButton.icon(
                       onPressed: () {
@@ -278,42 +290,45 @@ class _FavouritesState extends State<Favourites> {
               ],
             ),
             Row(
-              children: const [SizedBox(height: 30)],
-            ),
-            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 18),
-                      backgroundColor: const Color(0xff0d7a9a),
-                      minimumSize: const Size(230, 100),
-                    ),
-                    onPressed: () {
-                      if (_percorsoDueVuoto) return;
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Path(
-                            cameras,
-                            flutterTts,
-                            latitudineOri: latitudineOri,
-                            longitudineOri: longitudineOri,
-                            latitudineDest: latitudineDest2,
-                            longitudineDest: longitudineDest2,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      pref2,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 18),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        minimumSize: const Size(230, 100),
                       ),
-                    )),
+                      onPressed: _percorsoDueVuoto
+                          ? null
+                          : () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Path(
+                                    cameras,
+                                    flutterTts,
+                                    latitudineOri: latitudineOri,
+                                    longitudineOri: longitudineOri,
+                                    latitudineDest: latitudineDest2,
+                                    longitudineDest: longitudineDest2,
+                                  ),
+                                ),
+                              );
+                            },
+                      child: AutoSizeText(
+                        pref2,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                        ),
+                      )),
+                ),
                 Semantics(
-                    label: "Rimuovi dai preferiti",
+                    label: 'Rimuovi dai preferiti',
                     excludeSemantics: true,
                     child: ElevatedButton.icon(
                       onPressed: () {
@@ -336,43 +351,46 @@ class _FavouritesState extends State<Favourites> {
               ],
             ),
             Row(
-              children: const [SizedBox(height: 30)],
-            ),
-            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 18),
-                      backgroundColor: const Color(0xff0d7a9a),
-                      minimumSize: const Size(230, 100),
-                    ),
-                    onPressed: () {
-                      if (_percorsoTreVuoto) return;
-
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Path(
-                            cameras,
-                            flutterTts,
-                            latitudineOri: latitudineOri,
-                            longitudineOri: longitudineOri,
-                            latitudineDest: latitudineDest3,
-                            longitudineDest: longitudineDest3,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      pref3,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  margin: EdgeInsets.symmetric(vertical: 60),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 18),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        minimumSize: const Size(230, 100),
                       ),
-                    )),
+                      onPressed: _percorsoTreVuoto
+                          ? null
+                          : () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Path(
+                                    cameras,
+                                    flutterTts,
+                                    latitudineOri: latitudineOri,
+                                    longitudineOri: longitudineOri,
+                                    latitudineDest: latitudineDest3,
+                                    longitudineDest: longitudineDest3,
+                                  ),
+                                ),
+                              );
+                            },
+                      child: AutoSizeText(
+                        pref3,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
+                      )),
+                ),
                 Semantics(
-                    label: "Rimuovi dai preferiti",
+                    label: 'Rimuovi dai preferiti',
                     excludeSemantics: true,
                     child: ElevatedButton.icon(
                       onPressed: () {
@@ -393,7 +411,7 @@ class _FavouritesState extends State<Favourites> {
                     ))
               ],
             )
-          ]),
+          ],
         ),
       ),
     );

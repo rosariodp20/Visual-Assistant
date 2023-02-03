@@ -4,9 +4,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:visual_assistant/controller/favourites_controller.dart';
 import 'package:visual_assistant/controller/history_controller.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import '../widgets/appbar.dart';
 import '../main.dart';
-import 'path.dart';
+import './path.dart';
 
 class History extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -253,7 +254,7 @@ class _HistoryState extends State<History> {
   }
 
   void recuperaDatiPreferiti() {
-    setState((){
+    setState(() {
       percorsiPreferiti = _favouritesController.getFavouritesList();
     });
   }
@@ -316,47 +317,59 @@ class _HistoryState extends State<History> {
     return Scaffold(
       appBar: const CustomAppBar(),
       backgroundColor: Colors.grey[50],
-      body: SingleChildScrollView(
-        child: Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.all(30),
-          child: Column(children: [
-            const SizedBox(
-              height: 30,
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 50),
+              child: const Text(
+                'Cronologia Percorsi',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30
+                ),
+              ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 18),
-                      backgroundColor: const Color(0xff0d7a9a),
-                      minimumSize: const Size(230, 100),
-                    ),
-                    onPressed: _percorsoUnoVuoto
-                        ? null
-                        : () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => Path(
-                                  cameras,
-                                  flutterTts,
-                                  latitudineOri: latitudineOri,
-                                  longitudineOri: longitudineOri,
-                                  latitudineDest: latitudineDest1,
-                                  longitudineDest: longitudineDest1,
-                                ),
-                              ),
-                            );
-                          },
-                    child: Text(
-                      cronologiaPercorsi[0],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  margin: const EdgeInsets.symmetric(vertical: 60),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 18),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        minimumSize: const Size(230, 100),
                       ),
-                    )),
+                      onPressed: _percorsoUnoVuoto
+                          ? null
+                          : () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Path(
+                                    cameras,
+                                    flutterTts,
+                                    latitudineOri: latitudineOri,
+                                    longitudineOri: longitudineOri,
+                                    latitudineDest: latitudineDest1,
+                                    longitudineDest: longitudineDest1,
+                                  ),
+                                ),
+                              );
+                            },
+                      child: AutoSizeText(
+                        cronologiaPercorsi[0],
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                        ),
+                      )),
+                ),
                 Semantics(
                     label: stella1,
                     excludeSemantics: true,
@@ -391,41 +404,43 @@ class _HistoryState extends State<History> {
               ],
             ),
             Row(
-              children: const [SizedBox(height: 30)],
-            ),
-            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 18),
-                      backgroundColor: const Color(0xff0d7a9a),
-                      minimumSize: const Size(230, 100),
-                    ),
-                    onPressed: _percorsoDueVuoto
-                        ? null
-                        : () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => Path(
-                                  cameras,
-                                  flutterTts,
-                                  latitudineOri: latitudineOri,
-                                  longitudineOri: longitudineOri,
-                                  latitudineDest: latitudineDest2,
-                                  longitudineDest: longitudineDest2,
-                                ),
-                              ),
-                            );
-                          },
-                    child: Text(
-                      cronologiaPercorsi[1],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 18),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        minimumSize: const Size(230, 100),
                       ),
-                    )),
+                      onPressed: _percorsoDueVuoto
+                          ? null
+                          : () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Path(
+                                    cameras,
+                                    flutterTts,
+                                    latitudineOri: latitudineOri,
+                                    longitudineOri: longitudineOri,
+                                    latitudineDest: latitudineDest2,
+                                    longitudineDest: longitudineDest2,
+                                  ),
+                                ),
+                              );
+                            },
+                      child: AutoSizeText(
+                        cronologiaPercorsi[1],
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                        ),
+                      )),
+                ),
                 Semantics(
                     label: stella2,
                     excludeSemantics: true,
@@ -460,41 +475,44 @@ class _HistoryState extends State<History> {
               ],
             ),
             Row(
-              children: const [SizedBox(height: 30)],
-            ),
-            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 18),
-                      backgroundColor: const Color(0xff0d7a9a),
-                      minimumSize: const Size(230, 100),
-                    ),
-                    onPressed: _percorsoTreVuoto
-                        ? null
-                        : () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => Path(
-                                  cameras,
-                                  flutterTts,
-                                  latitudineOri: latitudineOri,
-                                  longitudineOri: longitudineOri,
-                                  latitudineDest: latitudineDest3,
-                                  longitudineDest: longitudineDest3,
-                                ),
-                              ),
-                            );
-                          },
-                    child: Text(
-                      cronologiaPercorsi[2],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 30,
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  margin: EdgeInsets.symmetric(vertical: 60),
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 18),
+                        backgroundColor: const Color(0xff0d7a9a),
+                        minimumSize: const Size(230, 100),
                       ),
-                    )),
+                      onPressed: _percorsoTreVuoto
+                          ? null
+                          : () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => Path(
+                                    cameras,
+                                    flutterTts,
+                                    latitudineOri: latitudineOri,
+                                    longitudineOri: longitudineOri,
+                                    latitudineDest: latitudineDest3,
+                                    longitudineDest: longitudineDest3,
+                                  ),
+                                ),
+                              );
+                            },
+                      child: AutoSizeText(
+                        cronologiaPercorsi[2],
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
+                      )),
+                ),
                 Semantics(
                     label: stella3,
                     excludeSemantics: true,
@@ -528,7 +546,7 @@ class _HistoryState extends State<History> {
                     ))
               ],
             )
-          ]),
+          ],
         ),
       ),
     );

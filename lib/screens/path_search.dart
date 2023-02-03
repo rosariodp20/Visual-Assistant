@@ -4,10 +4,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:geocoder/geocoder.dart';
 import 'package:visual_assistant/main.dart';
-import '../widgets/appbar.dart';
-import './path.dart';
 import 'package:camera/camera.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import './path.dart';
+import '../widgets/appbar.dart';
 
 class PathSearch extends StatefulWidget {
   final List<CameraDescription> cameras;

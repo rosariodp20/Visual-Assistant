@@ -1,5 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:visual_assistant/utils/shared_preferences_instance.dart';
+import '../utils/shared_preferences_instance.dart';
 
 class HistoryController {
   HistoryController._privateConstructor();
