@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
-import './camera.dart';
+import '../widgets/camera.dart';
 import '../widgets/detection_area.dart';
 import '../models/models.dart';
 
@@ -20,19 +19,6 @@ class _DetectionState extends State<Detection> {
   int _imageHeight = 0;
   int _imageWidth = 0;
   final String _model = yolo;
-
-  @override
-  void initState() {
-    super.initState();
-    loadModel();
-  }
-
-  loadModel() async {
-    await Tflite.loadModel(
-      model: "assets/yolov2_tiny.tflite",
-      labels: "assets/yolov2_tiny.txt",
-    );
-  }
 
   setRecognitions(recognitions, imageHeight, imageWidth) {
     setState(() {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
+import 'package:tflite/tflite.dart';
 import 'package:visual_assistant/utils/shared_preferences_instance.dart';
 import 'package:camera/camera.dart';
+import 'package:visual_assistant/utils/text_to_speech_instance.dart';
 import './screens/history.dart';
 import './screens/favourites.dart';
 import './screens/path_search.dart';
@@ -9,9 +10,7 @@ import './screens/detection.dart';
 import './widgets/homepage_button.dart';
 import './widgets/appbar.dart';
 import 'package:flutter/services.dart';
-
-late List<CameraDescription> cameras;
-FlutterTts flutterTts = FlutterTts();
+import './utils/available_cameras.dart';
 
 //Bisogna runnare con: flutter run --no-sound-null-safety
 Future<void> main() async {
@@ -20,28 +19,31 @@ Future<void> main() async {
   // Initialize SharedPreferences
   // This call loads in memory an instance of SharedPreferences
   SharedPreferencesInstance();
+  TextToSpeechInstance();
 
+  //Initialize detection model
+  await Tflite.loadModel(
+    model: "assets/yolov2_tiny.tflite",
+    labels: "assets/yolov2_tiny.txt",
+  );
   try {
     cameras = await availableCameras();
   } on CameraException catch (e) {
     print('Error: $e.code\nError Message: $e.message');
   }
 
-  flutterTts.setLanguage("it-IT");
-  flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});
-  flutterTts.setQueueMode(1);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-    @override
+  @override
   Widget build(BuildContext context) {
-SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
         title: 'Visual Assistant',
         theme: ThemeData(primaryColor: const Color(0xff0d7a9a)),
@@ -112,7 +114,7 @@ class MyHomePage extends StatelessWidget {
                   _buttonWidth,
                   'Ricerca percorso',
                   Icons.search,
-                  PathSearch(cameras, flutterTts))
+                  PathSearch(cameras))
             ],
           ),
         ],

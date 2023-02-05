@@ -1,23 +1,17 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
-import 'package:geolocator/geolocator.dart';
 import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
 import 'package:camera/camera.dart';
 import 'package:visual_assistant/controller/path_controller.dart';
 import '../screens/detection.dart';
 import '../widgets/appbar.dart';
-import '../main.dart';
+import '../utils/available_cameras.dart';
 
 class Path extends StatefulWidget {
   final double? latitudineOri, longitudineOri; //coordinate origine
   final double? latitudineDest, longitudineDest; //coordinate destinazione
   final List<CameraDescription> cameras;
-  final FlutterTts flutterTts;
 
-  const Path(this.cameras, this.flutterTts,
+  const Path(this.cameras,
       {Key? key,
       required this.latitudineOri,
       required this.longitudineOri,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:visual_assistant/controller/text_to_speech_controller.dart';
 import 'dart:math' as math;
-import '../main.dart';
 import '../models/objects.dart';
 
 String prevNotified = "";
@@ -13,8 +13,10 @@ class DetectionArea extends StatelessWidget {
   final double screenH;
   final double screenW;
   final String model;
+  final TextToSpeechController textToSpeechController =
+      TextToSpeechController.instance;
 
-  const DetectionArea(this.results, this.previewH, this.previewW, this.screenH,
+  DetectionArea(this.results, this.previewH, this.previewW, this.screenH,
       this.screenW, this.model,
       {Key? key})
       : super(key: key);
@@ -27,7 +29,7 @@ class DetectionArea extends StatelessWidget {
         var _w = re["rect"]["w"];
         var _y = re["rect"]["y"];
         var _h = re["rect"]["h"];
-        var scaleW, scaleH, x, y, w, h;
+        double scaleW, scaleH, x, y, w, h;
 
         if (screenH / screenW > previewH / previewW) {
           scaleW = screenH / previewH * previewW;
@@ -81,7 +83,7 @@ class DetectionArea extends StatelessWidget {
   }
 
   void traduciInItaliano(String element) {
-    flutterTts.speak(italianObjects[element]!);
+    textToSpeechController.speak(italianObjects[element]!);
   }
 
   void notifyElement(String element, double confidence) async {

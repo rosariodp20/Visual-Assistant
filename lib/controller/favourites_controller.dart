@@ -17,7 +17,7 @@ class FavouritesController {
   void removeFromFavouritesByPosition(int position) {
     List<String> favourites = _preferences.getStringList(_favouritesKey) ?? [];
 
-    if(position > favourites.length) return;
+    if (position > favourites.length) return;
 
     favourites.removeAt(position);
     _preferences.setStringList(_favouritesKey, favourites);
@@ -26,7 +26,7 @@ class FavouritesController {
   void removeByAddress(String address) {
     List<String> favourites = _preferences.getStringList(_favouritesKey) ?? [];
 
-    if(!favourites.remove(address)) return;
+    if (!favourites.remove(address)) return;
 
     _preferences.setStringList(_favouritesKey, favourites);
   }

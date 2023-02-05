@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:geocoder/geocoder.dart';
-import 'package:visual_assistant/main.dart';
+import 'package:visual_assistant/controller/text_to_speech_controller.dart';
 import 'package:camera/camera.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../controller/history_controller.dart';
 import './path.dart';
 import '../widgets/appbar.dart';
+import '../utils/available_cameras.dart';
 
 class PathSearch extends StatefulWidget {
   final List<CameraDescription> cameras;
-  final FlutterTts flutterTts;
+  final TextToSpeechController textToSpeechController =
+      TextToSpeechController.instance;
+  final HistoryController historyController = HistoryController.instance;
 
-  const PathSearch(this.cameras, this.flutterTts, {Key? key}) : super(key: key);
+  PathSearch(this.cameras, {Key? key}) : super(key: key);
 
   @override
   State<PathSearch> createState() => _PathSearchState();
@@ -23,7 +25,7 @@ class _PathSearchState extends State<PathSearch> {
   List<String> cronologiaPercorsi = [];
   late stt.SpeechToText _speech;
   bool _isListening = false;
-  String _textSpeech = "In attesa dell'indirizzo.";
+  String _textSpeech = "";
   var locationMessage = "";
   double? latitudineOri, longitudineOri; //coordinate origine
   double? latitudineDest, longitudineDest; //coordinate destinazione
@@ -74,27 +76,16 @@ class _PathSearchState extends State<PathSearch> {
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
-    recuperaDati();
-  }
-
-  void recuperaDati() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getStringList('listaCronologiaPercorsi') != null) {
-      cronologiaPercorsi = prefs.getStringList('listaCronologiaPercorsi')!;
-    }
-  }
-
-  void salvaDati() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList("listaCronologiaPercorsi", cronologiaPercorsi);
   }
 
   Widget _buildPopupDialog(BuildContext context) {
-    /*FlutterTts flutterTts = FlutterTts();
-    flutterTts.setLanguage("it-IT");
-    flutterTts.setVoice({"name": "it-it-x-itd-local", "locale": "it-IT"});*/
-    flutterTts.speak("Indica se l'indirizzo " + _textSpeech + " è corretto?");
-
+    if (_textSpeech != "") {
+      widget.textToSpeechController
+          .speak('Indica se l\'indirizzo $_textSpeech è corretto.');
+    } else {
+      widget.textToSpeechController
+          .speak('Non è stato inserito nessun indirizzo');
+    }
     getCurrentLocation(); //trova la posizione dell'utente
     convertiDestinazioneinCoordinate(); //converte la posizione (Stringa) in coordinate geografiche
 
@@ -104,66 +95,80 @@ class _PathSearchState extends State<PathSearch> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("Indica se l'indirizzo " + _textSpeech + " è corretto"),
+          _textSpeech == ''
+              ? const Text('Non è stato inserito nessun indirizzo')
+              : Text("Indica se l'indirizzo " + _textSpeech + " è corretto."),
         ],
       ),
-      actions: <Widget>[
-        ElevatedButton(
-          onPressed: () {
-            print("Latitudine origine: $latitudineOri" +
-                " | Longitudine origine: $longitudineOri");
-            print("Latitudine destinazione: $latitudineDest" +
-                " | Longitudine destinazione: $longitudineDest");
+      actions: _textSpeech != ''
+          ? <Widget>[
+              ElevatedButton(
+                onPressed: () {
+                  print("Latitudine origine: $latitudineOri" +
+                      " | Longitudine origine: $longitudineOri");
+                  print("Latitudine destinazione: $latitudineDest" +
+                      " | Longitudine destinazione: $longitudineDest");
 
-            //print("aspe' destinazione");
+                  //print("aspe' destinazione");
 
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => Path(
-                  cameras,
-                  flutterTts,
-                  latitudineOri: latitudineOri,
-                  longitudineOri: longitudineOri,
-                  latitudineDest: latitudineDest,
-                  longitudineDest: longitudineDest,
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => Path(
+                        cameras,
+                        latitudineOri: latitudineOri,
+                        longitudineOri: longitudineOri,
+                        latitudineDest: latitudineDest,
+                        longitudineDest: longitudineDest,
+                      ),
+                    ),
+                  );
+                  widget.historyController.addToHistory(address: _textSpeech);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff0d7a9a),
+                  minimumSize: const Size(100, 100),
                 ),
+                child: const Text('Si'),
               ),
-            );
-            if (cronologiaPercorsi.length == 3) {
-              cronologiaPercorsi.removeAt(0);
-              cronologiaPercorsi.add(_textSpeech);
-            } else {
-              cronologiaPercorsi.add(_textSpeech);
-            }
-            salvaDati();
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xff0d7a9a),
-            minimumSize: const Size(100, 100),
-          ),
-          child: const Text('Si'),
-        ),
-        const SizedBox(
-          width: 40,
-        ),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xff0d7a9a),
-            minimumSize: const Size(100, 100),
-          ),
-          child: const Text('No'),
-        ),
-      ],
+              const SizedBox(
+                width: 40,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _textSpeech = '';
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  minimumSize: const Size(100, 100),
+                ),
+                child: const Text('No'),
+              ),
+            ]
+          : <Widget>[
+              SizedBox(
+                width: 100,
+                height: 100,
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).primaryColor)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Torna indietro',
+                      style: TextStyle(fontSize: 18),
+                    )),
+              )
+            ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       backgroundColor: Colors.grey[50],
       body: SingleChildScrollView(
         child: Container(
@@ -175,10 +180,16 @@ class _PathSearchState extends State<PathSearch> {
               style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 60),
-            Text(
-              _textSpeech,
-              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
+            _textSpeech == ""
+                ? const Text(
+                    'In attesa di un indirizzo...',
+                    style: TextStyle(fontSize: 24),
+                  )
+                : Text(
+                    _textSpeech,
+                    style: const TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
             const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(

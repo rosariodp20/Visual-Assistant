@@ -5,9 +5,10 @@ import 'package:geocoder/geocoder.dart';
 import 'package:visual_assistant/controller/favourites_controller.dart';
 import 'package:visual_assistant/controller/history_controller.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:visual_assistant/controller/text_to_speech_controller.dart';
 import '../widgets/appbar.dart';
-import '../main.dart';
 import './path.dart';
+import '../utils/available_cameras.dart';
 
 class History extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -22,6 +23,8 @@ class _HistoryState extends State<History> {
   final HistoryController _historyController = HistoryController.instance;
   final FavouritesController _favouritesController =
       FavouritesController.instance;
+  final TextToSpeechController textToSpeechController =
+      TextToSpeechController.instance;
 
   // State
   List<String> cronologiaPercorsi = ['vuoto', 'vuoto', 'vuoto'];
@@ -208,8 +211,6 @@ class _HistoryState extends State<History> {
         _percorsoTreVuoto = true;
       });
     }
-
-    print('aaaaaaaaa');
   }
 
   void salvaDati(String value) {
@@ -260,18 +261,19 @@ class _HistoryState extends State<History> {
   }
 
   /////////////////////////////////////////////////////////////////////////
-  Widget dialogEliminaPreferito(BuildContext context, String butt) {
-    flutterTts.speak(
-        "Il limite di 3 preferiti è stato raggiunto. Aggiungendo il seguente indirizzo verrà rimosso il primo dalla lista dei preferiti. Continuare?");
+  Widget dialogEliminaPreferito(BuildContext context, String butt,
+      String favouriteToRemove, String favouriteToAdd) {
+    String alert = "Il limite di 3 preferiti è stato raggiunto. "
+        "Aggiungendo $favouriteToAdd, verrà rimosso $favouriteToRemove dalla lista dei preferiti."
+        " Premere si per confermare, no per tornare indietro?";
+
+    textToSpeechController.speak(alert);
     return AlertDialog(
       title: const Text(''),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const <Widget>[
-          Text(
-              "Il limite di 3 preferiti è stato raggiunto. Aggiungendo il seguente indirizzo verrà rimosso il primo dalla lista dei preferiti. Continuare?"),
-        ],
+        children: <Widget>[Text(alert)],
       ),
       actions: <Widget>[
         ElevatedButton(
@@ -325,10 +327,7 @@ class _HistoryState extends State<History> {
               margin: const EdgeInsets.only(top: 50),
               child: const Text(
                 'Cronologia Percorsi',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
               ),
             ),
             Row(
@@ -339,7 +338,6 @@ class _HistoryState extends State<History> {
                   margin: const EdgeInsets.symmetric(vertical: 60),
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 18),
                         backgroundColor: const Color(0xff0d7a9a),
@@ -352,7 +350,6 @@ class _HistoryState extends State<History> {
                                 MaterialPageRoute(
                                   builder: (context) => Path(
                                     cameras,
-                                    flutterTts,
                                     latitudineOri: latitudineOri,
                                     longitudineOri: longitudineOri,
                                     latitudineDest: latitudineDest1,
@@ -383,7 +380,11 @@ class _HistoryState extends State<History> {
                                   barrierDismissible: false,
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      dialogEliminaPreferito(context, 'but1'),
+                                      dialogEliminaPreferito(
+                                          context,
+                                          'but1',
+                                          percorsiPreferiti[0],
+                                          cronologiaPercorsi[0]),
                                 );
                               } else {
                                 aggiungiPreferiti1();
@@ -406,7 +407,7 @@ class _HistoryState extends State<History> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -423,7 +424,6 @@ class _HistoryState extends State<History> {
                                 MaterialPageRoute(
                                   builder: (context) => Path(
                                     cameras,
-                                    flutterTts,
                                     latitudineOri: latitudineOri,
                                     longitudineOri: longitudineOri,
                                     latitudineDest: latitudineDest2,
@@ -454,7 +454,11 @@ class _HistoryState extends State<History> {
                                   barrierDismissible: false,
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      dialogEliminaPreferito(context, 'but2'),
+                                      dialogEliminaPreferito(
+                                          context,
+                                          'but2',
+                                          percorsiPreferiti[0],
+                                          cronologiaPercorsi[1]),
                                 );
                               } else {
                                 aggiungiPreferiti2();
@@ -479,7 +483,7 @@ class _HistoryState extends State<History> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width * 0.7,
-                  margin: EdgeInsets.symmetric(vertical: 60),
+                  margin: const EdgeInsets.symmetric(vertical: 60),
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
@@ -495,7 +499,6 @@ class _HistoryState extends State<History> {
                                 MaterialPageRoute(
                                   builder: (context) => Path(
                                     cameras,
-                                    flutterTts,
                                     latitudineOri: latitudineOri,
                                     longitudineOri: longitudineOri,
                                     latitudineDest: latitudineDest3,
@@ -526,7 +529,11 @@ class _HistoryState extends State<History> {
                                   barrierDismissible: false,
                                   context: context,
                                   builder: (BuildContext context) =>
-                                      dialogEliminaPreferito(context, 'but3'),
+                                      dialogEliminaPreferito(
+                                          context,
+                                          'but3',
+                                          percorsiPreferiti[0],
+                                          cronologiaPercorsi[2]),
                                 );
                               } else {
                                 aggiungiPreferiti3();

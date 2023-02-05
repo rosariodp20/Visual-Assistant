@@ -10,11 +10,13 @@ class HistoryController {
   final SharedPreferences _preferences = SharedPreferencesInstance().instance;
   final String _historyKey = 'listaCronologiaPercorsi';
 
-  List<String> getHistoryList() => _preferences.getStringList(_historyKey) ?? [];
+  List<String> getHistoryList() =>
+      _preferences.getStringList(_historyKey) ?? [];
 
-  void removeFromHistory([int position = 0]) => _preferences.getStringList(_historyKey)?.removeAt(position);
+  void removeFromHistory([int position = 0]) =>
+      _preferences.getStringList(_historyKey)?.removeAt(position);
 
-  void addToFavourites({required String address}) {
+  void addToHistory({required String address}) {
     List<String> history = _preferences.getStringList(_historyKey) ?? [];
 
     if (history.length == 3) history.removeAt(0);
@@ -22,5 +24,4 @@ class HistoryController {
     history.add(address);
     _preferences.setStringList(_historyKey, history);
   }
-
 }

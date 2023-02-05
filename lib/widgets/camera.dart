@@ -43,29 +43,21 @@ class _CameraState extends State<Camera> {
           if (!isDetecting) {
             isDetecting = true;
 
-            int startTime = DateTime.now().millisecondsSinceEpoch;
-
-            if (widget.model == yolo) {
-              Tflite.detectObjectOnFrame(
-                bytesList: img.planes.map((plane) {
-                  return plane.bytes;
-                }).toList(),
-                model: yolo,
-                imageHeight: img.height,
-                imageWidth: img.width,
-                imageMean: widget.model == yolo ? 0 : 127.5,
-                imageStd: widget.model == yolo ? 255.0 : 127.5,
-                numResultsPerClass: 1,
-                threshold: widget.model == yolo ? 0.2 : 0.4,
-              ).then((recognitions) {
-                int endTime = DateTime.now().millisecondsSinceEpoch;
-                print("Detection took ${endTime - startTime}");
-
-                widget.setRecognitions(recognitions, img.height, img.width);
-
-                isDetecting = false;
-              });
-            }
+            Tflite.detectObjectOnFrame(
+              bytesList: img.planes.map((plane) {
+                return plane.bytes;
+              }).toList(),
+              model: yolo,
+              imageHeight: img.height,
+              imageWidth: img.width,
+              imageMean: 0,
+              imageStd: 255.0,
+              numResultsPerClass: 1,
+              threshold: 0.2,
+            ).then((recognitions) {
+              widget.setRecognitions(recognitions, img.height, img.width);
+              isDetecting = false;
+            });
           }
         });
       });

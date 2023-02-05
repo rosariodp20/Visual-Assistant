@@ -1,17 +1,13 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
-import 'package:camera/camera.dart';
-import '../screens/detection.dart';
-import '../widgets/appbar.dart';
-import '../main.dart';
+import 'package:visual_assistant/controller/text_to_speech_controller.dart';
 
 class PathController {
   PathController._privateConstructor();
+
   static final PathController instance = PathController._privateConstructor();
 
   bool flag = true, flag2 = true, flag3 = true;
@@ -19,6 +15,9 @@ class PathController {
   double? longOrigine;
   double? latDestinazione;
   double? longDestinazione;
+
+  final TextToSpeechController _textToSpeechController =
+      TextToSpeechController.instance;
 
   //indicazioni viaggio
   Future<void> getDirections(
@@ -55,17 +54,18 @@ class PathController {
       indication = controllaContenutoIndicazioni(indication);
       if (flag3 && flag2) {
         //await flutterTts.awaitSpeakCompletion(true);
-        flutterTts.speak(indication);
+        _textToSpeechController.speak(indication);
       } else {
         if (flag2) {
           //se le indicazioni sono uguali a quelle della posizione utente allora il percorso non è ancora aggiornato in quanto ad esempio l'utente si trova ancora su quella via
           print("indicazioni:" + svolta);
-          flutterTts.speak(svolta);
+          _textToSpeechController.speak(svolta);
         } else {
           //altrimenti le indicazioni sono nuove perchè l'utente ha cambiato via e assegnamo a containerIndicazioni le nuove indicazioni generate dall'api
           print("Result=$indication");
           //await flutterTts.awaitSpeakCompletion(true);
-          flutterTts.speak(indication + ", stai arrivando a destinazione");
+          _textToSpeechController
+              .speak(indication + ", stai arrivando a destinazione");
         }
       }
       flag3 = false;
@@ -133,7 +133,7 @@ class PathController {
     print(condizioniMeteo);
     /*await flutterTts
         .awaitSpeakCompletion(true);*/ //aspetta il completamento della frase
-    flutterTts.speak(condizioniMeteo);
+    _textToSpeechController.speak(condizioniMeteo);
 
     Future.delayed(const Duration(minutes: 5), () {
       if (flag == true) {
@@ -141,5 +141,5 @@ class PathController {
       }
     });
   }
-  //fine indicazioni viaggio
+//fine indicazioni viaggio
 }

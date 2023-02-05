@@ -5,8 +5,8 @@ import 'package:geocoder/geocoder.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import '../controller/favourites_controller.dart';
 import '../widgets/appbar.dart';
-import '../main.dart';
 import './path.dart';
+import '../utils/available_cameras.dart';
 
 class Favourites extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -59,7 +59,7 @@ class _FavouritesState extends State<Favourites> {
       await convertiDestinazioneinCoordinate2(pref2);
       await convertiDestinazioneinCoordinate3(pref3);
     } catch (e) {
-      print('errore -> ${e}');
+      print('errore -> $e');
     }
   }
 
@@ -249,7 +249,6 @@ class _FavouritesState extends State<Favourites> {
                                 MaterialPageRoute(
                                   builder: (context) => Path(
                                     cameras,
-                                    flutterTts,
                                     latitudineOri: latitudineOri,
                                     longitudineOri: longitudineOri,
                                     latitudineDest: latitudineDest1,
@@ -292,7 +291,7 @@ class _FavouritesState extends State<Favourites> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -309,7 +308,6 @@ class _FavouritesState extends State<Favourites> {
                                 MaterialPageRoute(
                                   builder: (context) => Path(
                                     cameras,
-                                    flutterTts,
                                     latitudineOri: latitudineOri,
                                     longitudineOri: longitudineOri,
                                     latitudineDest: latitudineDest2,
@@ -355,7 +353,7 @@ class _FavouritesState extends State<Favourites> {
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width * 0.7,
-                  margin: EdgeInsets.symmetric(vertical: 60),
+                  margin: const EdgeInsets.symmetric(vertical: 60),
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         //shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(40.0),),
@@ -371,7 +369,6 @@ class _FavouritesState extends State<Favourites> {
                                 MaterialPageRoute(
                                   builder: (context) => Path(
                                     cameras,
-                                    flutterTts,
                                     latitudineOri: latitudineOri,
                                     longitudineOri: longitudineOri,
                                     latitudineDest: latitudineDest3,
