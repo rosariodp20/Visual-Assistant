@@ -81,7 +81,7 @@ class _PathSearchState extends State<PathSearch> {
   Widget _buildPopupDialog(BuildContext context) {
     if (_textSpeech != "") {
       widget.textToSpeechController
-          .speak('Indica se l\'indirizzo $_textSpeech è corretto.');
+          .speak('Indica se l\'indirizzo $_textSpeech è corretto (Si a sinistra,No a destra).');
     } else {
       widget.textToSpeechController
           .speak('Non è stato inserito nessun indirizzo');
@@ -97,7 +97,7 @@ class _PathSearchState extends State<PathSearch> {
         children: <Widget>[
           _textSpeech == ''
               ? const Text('Non è stato inserito nessun indirizzo')
-              : Text("Indica se l'indirizzo " + _textSpeech + " è corretto."),
+              : Text("Indica se l'indirizzo " + _textSpeech + " è corretto (Si a sinistra,No a destra)."),
         ],
       ),
       actions: _textSpeech != ''
