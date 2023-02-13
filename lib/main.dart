@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tflite/tflite.dart';
+import 'package:visual_assistant/controller/detection_controller.dart';
 import 'package:visual_assistant/utils/shared_preferences_instance.dart';
 import 'package:camera/camera.dart';
 import 'package:visual_assistant/utils/text_to_speech_instance.dart';
@@ -22,10 +22,10 @@ Future<void> main() async {
   TextToSpeechInstance();
 
   //Initialize detection model
-  await Tflite.loadModel(
-    model: "assets/yolov2_tiny.tflite",
-    labels: "assets/yolov2_tiny.txt",
-  );
+  DetectionController detectionController = DetectionController.instance;
+  detectionController.loadModel(
+      pathToModel: 'assets/yolov2_tiny.tflite',
+      pathToLabels: 'assets/yolov2_tiny.txt');
   try {
     cameras = await availableCameras();
   } on CameraException catch (e) {

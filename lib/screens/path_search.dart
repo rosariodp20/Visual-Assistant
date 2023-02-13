@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:geocoder/geocoder.dart';
+import 'package:visual_assistant/controller/path_search_controller.dart';
 import 'package:visual_assistant/controller/text_to_speech_controller.dart';
 import 'package:camera/camera.dart';
 import '../controller/history_controller.dart';
@@ -22,6 +21,8 @@ class PathSearch extends StatefulWidget {
 }
 
 class _PathSearchState extends State<PathSearch> {
+  final PathSearchController pathSearchController =
+      PathSearchController.instance;
   List<String> cronologiaPercorsi = [];
   late stt.SpeechToText _speech;
   bool _isListening = false;
@@ -31,17 +32,21 @@ class _PathSearchState extends State<PathSearch> {
   double? latitudineDest, longitudineDest; //coordinate destinazione
 
   void getCurrentLocation() async {
-    var lastPosition = await Geolocator().getLastKnownPosition();
-    latitudineOri = lastPosition.latitude;
-    longitudineOri = lastPosition.longitude;
+    final currentLocation = pathSearchController.getCurrentLocation();
+    latitudineOri =
+        currentLocation.then((value) => value['latitude']) as double?;
+    longitudineOri =
+        currentLocation.then((value) => value['longitude']) as double?;
   }
 
-  void convertiDestinazioneinCoordinate() async {
-    final query = _textSpeech;
-    var addresses = await Geocoder.local.findAddressesFromQuery(query);
-    var first = addresses.first;
-    latitudineDest = first.coordinates.latitude;
-    longitudineDest = first.coordinates.longitude;
+  void convertiDestinazioneInCoordinate() async {
+    final addresses = pathSearchController.getDestinationCoordinates(_textSpeech);
+
+    addresses.then((value){
+      value.first;
+      latitudineDest = value.first.coordinates.latitude;
+      longitudineDest = value.first.coordinates.longitude;
+    });
   }
 
   void onListen() async {
@@ -80,14 +85,14 @@ class _PathSearchState extends State<PathSearch> {
 
   Widget _buildPopupDialog(BuildContext context) {
     if (_textSpeech != "") {
-      widget.textToSpeechController
-          .speak('Indica se l\'indirizzo $_textSpeech è corretto (Si a sinistra,No a destra).');
+      widget.textToSpeechController.speak(
+          'Indica se l\'indirizzo $_textSpeech è corretto (Si a sinistra,No a destra).');
     } else {
       widget.textToSpeechController
           .speak('Non è stato inserito nessun indirizzo');
     }
     getCurrentLocation(); //trova la posizione dell'utente
-    convertiDestinazioneinCoordinate(); //converte la posizione (Stringa) in coordinate geografiche
+    convertiDestinazioneInCoordinate(); //converte la posizione (Stringa) in coordinate geografiche
 
     return AlertDialog(
       title: const Text(''),
@@ -97,7 +102,9 @@ class _PathSearchState extends State<PathSearch> {
         children: <Widget>[
           _textSpeech == ''
               ? const Text('Non è stato inserito nessun indirizzo')
-              : Text("Indica se l'indirizzo " + _textSpeech + " è corretto (Si a sinistra,No a destra)."),
+              : Text("Indica se l'indirizzo " +
+                  _textSpeech +
+                  " è corretto (Si a sinistra,No a destra)."),
         ],
       ),
       actions: _textSpeech != ''

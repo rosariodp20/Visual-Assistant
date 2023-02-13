@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:tflite/tflite.dart';
 import 'dart:math' as math;
-import '../models/models.dart';
+import '../controller/detection_controller.dart';
 
 typedef Callback = void Function(List<dynamic> list, int h, int w);
 
@@ -20,6 +19,7 @@ class Camera extends StatefulWidget {
 
 class _CameraState extends State<Camera> {
   late CameraController controller;
+  final DetectionController detectionController = DetectionController.instance;
   bool isDetecting = false;
 
   @override
@@ -43,19 +43,8 @@ class _CameraState extends State<Camera> {
           if (!isDetecting) {
             isDetecting = true;
 
-            Tflite.detectObjectOnFrame(
-              bytesList: img.planes.map((plane) {
-                return plane.bytes;
-              }).toList(),
-              model: yolo,
-              imageHeight: img.height,
-              imageWidth: img.width,
-              imageMean: 0,
-              imageStd: 255.0,
-              numResultsPerClass: 1,
-              threshold: 0.2,
-            ).then((recognitions) {
-              widget.setRecognitions(recognitions, img.height, img.width);
+            detectionController.detectFromCamera(img).then((recognitions) {
+              widget.setRecognitions(recognitions!, img.height, img.width);
               isDetecting = false;
             });
           }
