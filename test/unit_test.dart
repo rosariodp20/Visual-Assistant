@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:visual_assistant/controller/path_controller.dart';
+import 'package:visual_assistant/controller/realtime_update_controller.dart';
 
 void main() {
   test("Testing della ricerca del percorso", () {

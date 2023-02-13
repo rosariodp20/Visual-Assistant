@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:camera/camera.dart';
-import 'package:visual_assistant/controller/path_controller.dart';
+import 'package:visual_assistant/controller/realtime_update_controller.dart';
 import '../screens/detection.dart';
 import '../widgets/appbar.dart';
 import '../utils/available_cameras.dart';

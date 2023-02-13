@@ -5,7 +5,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import '../controller/favourites_controller.dart';
 import '../widgets/appbar.dart';
-import './path.dart';
+import './realtime_update.dart';
 import '../utils/available_cameras.dart';
 
 class Favourites extends StatefulWidget {

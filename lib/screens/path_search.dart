@@ -4,7 +4,7 @@ import 'package:visual_assistant/controller/path_search_controller.dart';
 import 'package:visual_assistant/controller/text_to_speech_controller.dart';
 import 'package:camera/camera.dart';
 import '../controller/history_controller.dart';
-import './path.dart';
+import './realtime_update.dart';
 import '../widgets/appbar.dart';
 import '../utils/available_cameras.dart';
 
@@ -104,7 +104,7 @@ class _PathSearchState extends State<PathSearch> {
               ? const Text('Non è stato inserito nessun indirizzo')
               : Text("Indica se l'indirizzo " +
                   _textSpeech +
-                  " è corretto (Si a sinistra,No a destra)."),
+                  " è corretto (Sì a sinistra, No a destra)."),
         ],
       ),
       actions: _textSpeech != ''

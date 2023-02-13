@@ -7,7 +7,7 @@ import 'package:visual_assistant/controller/history_controller.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:visual_assistant/controller/text_to_speech_controller.dart';
 import '../widgets/appbar.dart';
-import './path.dart';
+import './realtime_update.dart';
 import '../utils/available_cameras.dart';
 
 class History extends StatefulWidget {
